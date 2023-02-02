@@ -1,0 +1,160 @@
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useLayoutEffect } from 'react';
+import { BusinessNameProps } from '../declarations/navigation';
+import Colors from '../constants/Colors';
+import { Button, IconButton, TextInput } from 'react-native-paper';
+import { BackSvgComponent } from '@/assets/icons';
+
+const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
+  // ************* HEADER *************
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Back',
+      headerStyle: {
+        backgroundColor: Colors['background'],
+      },
+      headerTintColor: Colors['grey-900'],
+      headerTitleStyle: {
+        fontWeight: '600',
+        fontSize: 18,
+        fontFamily: 'Hubhead',
+      },
+      headerLeft: () => (
+        <IconButton
+          icon={() => <BackSvgComponent />}
+          // iconColor={Colors['grey-900']}
+          // size={30}
+          onPress={() => navigation.goBack()}
+        />
+      ),
+      headerRight: () => (
+        <IconButton
+          icon='close'
+          iconColor={Colors['grey-900']}
+          size={20}
+          onPress={() => navigation.popToTop()}
+        />
+      ),
+      // headerTitleAlign: 'center',
+    });
+  }, [navigation]);
+
+  const handleIndustryRedirect = () => {
+    navigation.navigate('BusinessLocation');
+  };
+
+  return (
+    <ScrollView
+      contentContainerStyle={styles.containerContent}
+      style={styles.container}
+    >
+      <View>
+        <View style={styles.inputWrapper}>
+          <Text style={styles.inputLabel}>Business Name</Text>
+          <TextInput
+            mode='flat'
+            style={styles.input}
+            outlineColor={Colors['grey-400']}
+            activeOutlineColor={Colors['grey-700']}
+            selectionColor={Colors['inputText']}
+            underlineColor={Colors['inputText']}
+            activeUnderlineColor={Colors['inputText']}
+            contentStyle={styles.inputContent}
+          />
+        </View>
+      </View>
+      <View style={styles.buttonWrapper}>
+        <Button
+          mode='contained'
+          style={styles.button}
+          buttonColor={Colors['black']}
+          textColor={Colors['white']}
+          accessibilityLabel='Sign Up'
+          labelStyle={styles.buttonLabel}
+          contentStyle={styles.buttonContent}
+          // loading={loadingBtn}
+          // disabled={loadingBtn}
+          onPress={() => handleIndustryRedirect()}
+          // onPress={() => console.log('Save to netxt screen')}
+        >
+          Next
+        </Button>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default BusinessNameScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors['background'],
+    padding: 20,
+  },
+  containerContent: {
+    flex: 1,
+    justifyContent: 'space-between',
+    // alignItems: 'center',
+    // padding: 20,
+  },
+  inputWrapper: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 18,
+    color: Colors['grey-800'],
+    marginTop: 15,
+    marginBottom: 25,
+    fontFamily: 'Hubhead',
+  },
+  input: {
+    // paddingVertical: 10,
+    // height: 60,
+    fontSize: 24,
+    fontFamily: 'Hubhead',
+    // borderWidth: 1,
+  },
+  inputContent: {
+    // fontFamily: 'Hubhead',
+    backgroundColor: Colors['background'],
+  },
+  inputOutline: {
+    // borderColor: Colors['grey-400'],
+    // borderRadius: 10,
+  },
+  dropdownPlaceholder: {
+    fontSize: 18,
+    color: Colors['grey-800'],
+    // fontFamily: 'Hubhead',
+  },
+  dropdown: {
+    // borderWidth: 1,
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    borderColor: Colors['grey-400'],
+  },
+  dropdownText: {
+    fontSize: 18,
+    // fontFamily: 'Hubhead',
+    color: Colors['grey-800'],
+  },
+  buttonWrapper: {
+    marginTop: 20,
+  },
+  button: {
+    // height: 60,
+    borderRadius: 10,
+    borderWidth: 1,
+    // backgroundColor: Colors['grey-700'],
+  },
+  buttonContent: {
+    // borderWidth: 1,
+    height: 50,
+  },
+  buttonLabel: {
+    fontSize: 18,
+    fontFamily: 'Hubhead',
+  },
+});

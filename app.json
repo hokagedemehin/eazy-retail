@@ -4,10 +4,10 @@
     "slug": "easy-retail",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/AppIcons/appstore.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/easy-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,12 +22,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/AppIcons/appstore.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.demibk.easyretail"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/AppIcons/android/mipmap-hdpi/ic_launcher.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1b05b21e-d2c1-4c55-b697-5ad285b91f45"
+      }
     }
   }
 }
