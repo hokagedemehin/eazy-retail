@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 // import OnboardingComp from '../components/Onboarding/Onboarding';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+// import { useAppDispatch } from '../hooks/redux';
 import { setOnBoarded, setToken } from '../store/slice/tokenSlice';
 import * as SecureStore from 'expo-secure-store';
 // import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './SignUpScreen';
 import SignInScreen from './SignInScreen';
-import { RootStackParamList } from '../declarations/navigation';
+import { RootStackParamList } from '../interfaces/navigation';
 // import Colors from '../constants/Colors';
 // import AppIntroSlider from 'react-native-app-intro-slider';
 import OnboardingComp from '../components/Onboarding/Onboarding';
@@ -58,7 +59,7 @@ const AllScreens = () => {
 
   // *************** ONBOARDING SECURE STORAGE ***************
   const getOnboarding = async () => {
-    // await SecureStore.deleteItemAsync('onboarding');
+    await SecureStore.deleteItemAsync('onboarding');
     const result = await SecureStore.getItemAsync('onboarding');
     return result;
   };
@@ -67,10 +68,10 @@ const AllScreens = () => {
   useEffect(() => {
     const getOnboardingFromStorage = async () => {
       const onboarding = await getOnboarding();
-      console.log('onboarding', onboarding);
+      // console.log('onboarding', onboarding);
 
       const token = await getToken();
-      console.log('token :>> ', token);
+      // console.log('token :>> ', token);
 
       if (onboarding) {
         dispatch(setOnBoarded(true));
@@ -88,14 +89,14 @@ const AllScreens = () => {
 
   // *************** NAVIGATION ***************
   const Stack = createNativeStackNavigator<RootStackParamList>();
-
+  // const placeholder = true;
   return (
     <SafeAreaView style={styles.safeAreaStyle}>
       <View style={styles.container}>
         {loadingPage && <LoadingComp />}
         {!loadingPage && (
           <Stack.Navigator
-            initialRouteName={!onBoarded ? 'Onboarding' : 'SignIn'}
+            initialRouteName={onBoarded ? 'Onboarding' : 'SignIn'}
           >
             <Stack.Screen
               name='Onboarding'

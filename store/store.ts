@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import tokenReducer from './slice/tokenSlice'
+import hideTabsReducer from './slice/hideTabsSlice'
+
 export const store = configureStore({
   reducer: {
     token: tokenReducer,
+    hideTabs: hideTabsReducer,
   },
 })
 

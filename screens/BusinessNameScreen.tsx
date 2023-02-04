@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect } from 'react';
-import { BusinessNameProps } from '../declarations/navigation';
+import { BusinessNameProps } from '../interfaces/navigation';
 import Colors from '../constants/Colors';
 import { Button, IconButton, TextInput } from 'react-native-paper';
 import { BackSvgComponent } from '@/assets/icons';
@@ -54,8 +54,6 @@ const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
           <TextInput
             mode='flat'
             style={styles.input}
-            outlineColor={Colors['grey-400']}
-            activeOutlineColor={Colors['grey-700']}
             selectionColor={Colors['inputText']}
             underlineColor={Colors['inputText']}
             activeUnderlineColor={Colors['inputText']}
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors['grey-800'],
     marginTop: 15,
-    marginBottom: 25,
+    marginBottom: 15,
     fontFamily: 'Hubhead',
   },
   input: {
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors['background'],
   },
   inputOutline: {
-    // borderColor: Colors['grey-400'],
+    borderColor: Colors['inputText'],
     // borderRadius: 10,
   },
   dropdownPlaceholder: {

@@ -2,21 +2,24 @@ import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
 import { Button } from 'react-native-paper';
-import { CelebrationSvgComponent } from '@/assets/icons';
-import { RegistrationSuccessfullProps } from '../declarations/navigation';
+import { RegistrationSuccessfullProps } from '../interfaces/navigation';
+import { Image } from '@rneui/themed';
 
 const RegistrationSuccessfullScreen = ({
   navigation,
 }: RegistrationSuccessfullProps) => {
   const handleHomePageRedirect = () => {
-    console.log('Redirect to Home Page');
+    // console.log('Redirect to Home Page');
     navigation.replace('Home');
   };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.successContainer}>
         <View style={styles.successContent}>
-          <CelebrationSvgComponent />
+          <Image
+            source={require('../assets/onboarding/celebration.png')}
+            style={styles.successImage}
+          />
 
           <Text style={styles.successText}>Successful</Text>
           <Text style={styles.successSubText}>
@@ -70,8 +73,8 @@ const styles = StyleSheet.create({
   successImage: {
     width: 300,
     height: 300,
-    resizeMode: 'contain',
-    borderRadius: 10,
+    // resizeMode: 'contain',
+    // borderRadius: 10,
   },
   successText: {
     fontSize: 24,

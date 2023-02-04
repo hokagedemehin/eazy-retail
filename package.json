@@ -44,6 +44,7 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-mmkv": "^2.5.1",
+    "react-native-pager-view": "6.0.1",
     "react-native-paper": "^5.1.3",
     "react-native-raw-bottom-sheet": "^2.2.0",
     "react-native-reanimated": "~2.12.0",
@@ -58,6 +59,7 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
     "react-redux": "^8.0.5",
+    "use-debounce": "^9.0.3",
     "zod": "^3.20.2",
     "zustand": "^4.3.2"
   },

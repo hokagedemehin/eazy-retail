@@ -1,10 +1,11 @@
-import { Platform, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet } from 'react-native';
 import React from 'react';
+import UpcomingComponent from '@/components/Upcoming/Upcoming';
 
 const MoreScreen = () => {
   return (
     <SafeAreaView style={styles.safeAreaStyle}>
-      <Text>MoreScreen</Text>
+      <UpcomingComponent />
     </SafeAreaView>
   );
 };
@@ -16,12 +17,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Platform.OS === 'android' ? 25 : 10,
     backgroundColor: 'white',
-  },
-
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

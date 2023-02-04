@@ -14,7 +14,7 @@ import React, {
   useState,
   // useCallback,
 } from 'react';
-import { BusinessLocationProps } from '../declarations/navigation';
+import { BusinessLocationProps } from '../interfaces/navigation';
 import Colors from '../constants/Colors';
 import {
   Button,
@@ -36,14 +36,14 @@ import { BackSvgComponent } from '@/assets/icons';
 const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Location',
+      title: 'Back',
       headerStyle: {
         backgroundColor: Colors['background'],
       },
       headerTintColor: Colors['grey-900'],
       headerTitleStyle: {
         fontWeight: '600',
-        fontSize: 22,
+        fontSize: 20,
         fontFamily: 'Hubhead',
       },
       headerLeft: () => (
@@ -194,7 +194,7 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
   // **************** RENDER ITEM ****************
   const renderCountryItem = ({ item }: { item: Country }) => (
     <TouchableRipple
-      rippleColor={Colors['background']}
+      rippleColor={Colors['white']}
       onPress={() => {
         setSelectedCountry(item.value);
         actionSheetRef.current?.hide();
@@ -228,6 +228,7 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
                 label='Country'
                 mode='outlined'
                 style={styles.input}
+                activeOutlineColor={Colors['black']}
                 contentStyle={styles.inputContent}
                 outlineStyle={styles.inputOutline}
                 editable={false}
@@ -367,21 +368,25 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     marginBottom: 20,
+    paddingTop: 5,
+    paddingBottom: 12,
+    // borderWidth: 1,
+    backgroundColor: Colors['white'],
+    borderRadius: 5,
   },
   input: {
-    paddingVertical: 11,
+    // paddingVertical: 11,
     // height: 40,
-    fontSize: 14,
+    // fontSize: 14,
     fontFamily: 'Hubhead',
     // borderWidth: 1,
   },
   inputContent: {
     // fontFamily: 'Hubhead',
+    backgroundColor: 'white',
   },
   inputOutline: {
-    backgroundColor: 'white',
-    borderColor: Colors['grey-400'],
-    borderRadius: 7,
+    borderColor: Colors['white'],
   },
   inputIcon: {
     marginTop: 10,

@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
 import Colors from '../constants/Colors';
-import { SignUpProps } from '../declarations/navigation';
+import { SignUpProps } from '../interfaces/navigation';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 
 const SignUpScreen = ({ navigation }: SignUpProps) => {
@@ -47,9 +47,18 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           label='Email Address'
           mode='outlined'
           style={styles.input}
-          activeOutlineColor={Colors['grey-700']}
+          // activeOutlineColor={Colors['white']}
+          outlineColor={Colors['white']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
+          theme={{
+            colors: {
+              primary: Colors['black'],
+              text: Colors['black'],
+              placeholder: Colors['white'],
+              background: Colors['white'],
+            },
+          }}
         />
       </View>
       <View style={styles.inputWrapper}>
@@ -57,8 +66,8 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           label='Phone Number'
           mode='outlined'
           style={styles.input}
-          // outlineColor={Colors['grey-400']}
-          activeOutlineColor={Colors['grey-700']}
+          outlineColor={Colors['white']}
+          activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
           keyboardType='phone-pad'
@@ -70,7 +79,7 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           mode='outlined'
           style={styles.input}
           // outlineColor={Colors['grey-400']}
-          activeOutlineColor={Colors['grey-700']}
+          activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
         />
@@ -81,7 +90,7 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           mode='outlined'
           style={styles.input}
           // outlineColor={Colors['grey-400']}
-          activeOutlineColor={Colors['grey-700']}
+          activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
         />
@@ -92,7 +101,7 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           mode='outlined'
           style={styles.input}
           // outlineColor={Colors['grey-400']}
-          activeOutlineColor={Colors['grey-700']}
+          activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
           secureTextEntry={showPassword ? false : true}
@@ -111,7 +120,7 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           mode='outlined'
           style={styles.input}
           // outlineColor={Colors['grey-400']}
-          activeOutlineColor={Colors['grey-700']}
+          activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
           secureTextEntry={showPassword ? false : true}
@@ -171,21 +180,25 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     marginBottom: 15,
+    paddingTop: 5,
+    paddingBottom: 12,
+    // borderWidth: 1,
+    backgroundColor: Colors['white'],
+    borderRadius: 5,
   },
   input: {
-    paddingVertical: 11,
-    // height: 45,
-    fontSize: 14,
+    // paddingVertical: 11,
+    // height: 55,
+    // fontSize: 12,
     fontFamily: 'Hubhead',
     // borderWidth: 1,
   },
   inputContent: {
-    // backgroundColor: 'red',
+    backgroundColor: 'white',
   },
   inputOutline: {
-    backgroundColor: 'white',
-    borderColor: Colors['border'],
-    borderRadius: 7,
+    // backgroundColor: 'white',
+    borderColor: Colors['white'],
   },
   inputIcon: {
     // borderWidth: 1,

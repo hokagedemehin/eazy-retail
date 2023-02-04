@@ -1,27 +1,23 @@
-import { Platform, SafeAreaView, StyleSheet, Text } from 'react-native';
 import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Counter from '../counter/Counter';
+import CounterProduct from '../counter/CounterProduct';
+import NewProduct from '../counter/NewProduct';
+
+const CounterStack = createNativeStackNavigator();
 
 const CounterScreen = () => {
   return (
-    <SafeAreaView style={styles.safeAreaStyle}>
-      <Text>CounterScreen</Text>
-    </SafeAreaView>
+    <CounterStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <CounterStack.Screen name='Counter' component={Counter} />
+      <CounterStack.Screen name='CounterProduct' component={CounterProduct} />
+      <CounterStack.Screen name='NewProduct' component={NewProduct} />
+    </CounterStack.Navigator>
   );
 };
 
 export default CounterScreen;
-
-const styles = StyleSheet.create({
-  safeAreaStyle: {
-    flex: 1,
-    paddingTop: Platform.OS === 'android' ? 25 : 10,
-    backgroundColor: 'white',
-  },
-
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
-import { SignInProps } from '../declarations/navigation';
+import { SignInProps } from '../interfaces/navigation';
 import Colors from '../constants/Colors';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 
@@ -32,7 +32,7 @@ const SignInScreen = ({ navigation }: SignInProps) => {
   };
 
   const handleHomePageRedirect = () => {
-    console.log('Redirect to Home Page');
+    // console.log('Redirect to Home Page');
     navigation.replace('Home');
   };
 
@@ -47,9 +47,9 @@ const SignInScreen = ({ navigation }: SignInProps) => {
           <TextInput
             label='Email Address/Phone Number'
             mode='outlined'
+            autoCapitalize='none'
             style={styles.input}
-            outlineColor={Colors['grey-400']}
-            activeOutlineColor={Colors['grey-700']}
+            activeOutlineColor={Colors['black']}
             contentStyle={styles.inputContent}
             outlineStyle={styles.inputOutline}
           />
@@ -59,11 +59,11 @@ const SignInScreen = ({ navigation }: SignInProps) => {
             label='Password'
             mode='outlined'
             style={styles.input}
-            outlineColor={Colors['grey-400']}
-            activeOutlineColor={Colors['grey-700']}
+            activeOutlineColor={Colors['black']}
             contentStyle={styles.inputContent}
             outlineStyle={styles.inputOutline}
             secureTextEntry={showPassword ? false : true}
+            autoCapitalize='none'
             right={
               <TextInput.Icon
                 icon={showPassword ? 'eye' : 'eye-off'}
@@ -138,51 +138,29 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     marginBottom: 20,
-    // paddingVertical: 10,
-    // // paddingTop: 10,
-    // // paddingBottom: 15,
-    // borderRadius: 10,
+    paddingTop: 5,
+    paddingBottom: 12,
     // borderWidth: 1,
-    // borderColor: Colors['border'],
-    // backgroundColor: Colors['white'],
+    backgroundColor: Colors['white'],
+    borderRadius: 5,
   },
   passwordInputWrapper: {
-    // marginBottom: 5,
-    // paddingVertical: 10,
-    // // paddingTop: 10,
-    // // paddingBottom: 15,
-    // borderRadius: 10,
+    paddingTop: 5,
+    paddingBottom: 12,
     // borderWidth: 1,
-    // borderColor: Colors['border'],
-    // backgroundColor: Colors['white'],
+    backgroundColor: Colors['white'],
+    borderRadius: 5,
   },
   input: {
-    paddingVertical: 11,
-    // height: 45,
-    fontSize: 14,
     fontFamily: 'Hubhead',
     // borderWidth: 1,
   },
   inputContent: {
-    // backgroundColor: 'red',
+    backgroundColor: 'white',
   },
   inputOutline: {
-    backgroundColor: 'white',
-    borderColor: Colors['border'],
-    borderRadius: 7,
+    borderColor: Colors['white'],
   },
-  // input: {
-  //   // height: 50,
-  //   fontSize: 18,
-  // },
-  // inputContent: {
-  //   // height: 50,
-  // },
-  // inputOutline: {
-  //   borderRadius: 10,
-  //   borderColor: Colors['white'],
-  //   backgroundColor: Colors['white'],
-  // },
   inputIcon: {
     // color: Colors['grey-400'],
   },

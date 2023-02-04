@@ -1,7 +1,7 @@
 // import { StatusBar } from 'expo-status-bar';
 import AllScreens from './screens/AllScreens';
 import * as SplashScreen from 'expo-splash-screen';
-import { StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import * as Font from 'expo-font';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './store/store';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -20,6 +21,13 @@ export default function App() {
         // Pre-load fonts, make any API calls you need to do here
         await Font.loadAsync({
           Hubhead: require('./assets/fonts/Hubhead.otf'),
+          'Givonic-Variable': require('./assets/fonts/Givonic-Font/GivonicVariable.otf'),
+          'Givonic-Black': require('./assets/fonts/Givonic-Font/Givonic-Black.otf'),
+          'Givonic-Bold': require('./assets/fonts/Givonic-Font/Givonic-Bold.otf'),
+          'Givonic-Light': require('./assets/fonts/Givonic-Font/Givonic-Light.otf'),
+          'Givonic-Regular': require('./assets/fonts/Givonic-Font/Givonic-Regular.otf'),
+          'Givonic-SemiBold': require('./assets/fonts/Givonic-Font/Givonic-SemiBold.otf'),
+          'Givonic-Thin': require('./assets/fonts/Givonic-Font/Givonic-Thin.otf'),
         });
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
@@ -64,6 +72,7 @@ export default function App() {
           </NavigationContainer>
         </PaperProvider>
       </StoreProvider>
+      <StatusBar backgroundColor='black' barStyle={'light-content'} />
     </>
   );
 }

@@ -9,13 +9,9 @@ import {
 } from 'react-native';
 // import { Button } from 'react-native-paper';
 import { Button } from '@rneui/themed';
-// import AppIntroSlider from 'react-native-app-intro-slider';
-// import { Button } from 'react-native-paper';
-// import Colors from '../../constants/Colors';
-// import * as SecureStore from 'expo-secure-store';
 import Swiper from 'react-native-swiper';
 import { useAppDispatch } from '@/hooks/redux';
-import { OnboardingProps, RootStackParamList } from '@/declarations/navigation';
+import { OnboardingProps, RootStackParamList } from '@/interfaces/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { setOnBoarded } from '@/store/slice/tokenSlice';
 
@@ -170,7 +166,8 @@ const styles = StyleSheet.create({
     padding: 30,
     // backgroundColor: '#9E8CE0',
     height: 300,
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
+    paddingTop: 100,
     marginHorizontal: 30,
     // borderRadius: 20,
     transform: [

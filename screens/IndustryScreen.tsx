@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { IndustryProps } from '../declarations/navigation';
+import { IndustryProps } from '../interfaces/navigation';
 import Colors from '../constants/Colors';
 import {
   Button,
@@ -27,14 +27,14 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
   // *************** PAGE HEADER ***************
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Industry',
+      title: 'Back',
       headerStyle: {
         backgroundColor: Colors['background'],
       },
       headerTintColor: Colors['grey-900'],
       headerTitleStyle: {
         fontWeight: '600',
-        fontSize: 25,
+        fontSize: 20,
         fontFamily: 'Hubhead',
       },
       headerLeft: () => (
@@ -89,7 +89,7 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
     },
   ]);
 
-  console.log('industry', industry);
+  // console.log('industry', industry);
 
   // ********************** CARD SELECTION **********************
   const [selectedIndustry, setSelectedIndustry] = useState(0);

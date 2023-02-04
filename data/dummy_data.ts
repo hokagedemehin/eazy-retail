@@ -1,0 +1,150 @@
+export const allSales = [
+  {
+    id: '1',
+    name: "Dangote Rice 25kg",
+    price: 35000,
+    quantity: 2,
+    totalPrice: 70000,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675451540/bigRice_eq9uvj.png",
+    status: "pending",
+  },
+  {
+    id: '2',
+    name: "Kings Oil 5kg",
+    price: 11000,
+    quantity: 25,
+    totalPrice: 275000,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675463474/keg2_zleioc.png",
+    status: "completed",
+  },
+  {
+    id: '3',
+    name: "Knorr Chicken Cubes ",
+    price: 1500,
+    quantity: 5,
+    totalPrice: 7500,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675463520/knorr_uxqrgz.png",
+    status: "pending",
+  },
+  {
+    id: '4',
+    name: "Maggi Star",
+    price: 1500,
+    quantity: 5,
+    totalPrice: 7500,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675463520/maggi_gf5wqs.png",
+    status: "completed",
+  },
+]
+
+export const allCustomers = [
+  {
+    id: '1',
+    name: "Segun Ogunleye",
+    numberOfItems: 1,
+    totalAmount: 70000,
+  },
+  {
+    id: '2',
+    name: "Oluwaseun David",
+    numberOfItems: 25,
+    totalAmount: 275000,
+  },
+  {
+    id: '3',
+    name: "Francis Mgbemena",
+    numberOfItems: 5,
+    totalAmount: 7500,
+  },
+  {
+    id: '4',
+    name: "Kemi Williams",
+    numberOfItems: 15,
+    totalAmount: 36500,
+  },
+  {
+    id: '5',
+    name: 'Funmi Peters',
+    numberOfItems: 50,
+    totalAmount: 550000,
+  },
+  {
+    id: '6',
+    name: 'Bukola Quadri',
+    numberOfItems: 10,
+    totalAmount: 150000,
+  },
+  {
+    id: '7',
+    name: 'Lanre Tijani',
+    numberOfItems: 20,
+    totalAmount: 200000,
+  },
+]
+
+export const allProducts = [
+  {
+    id: '1',
+    name: "Dangote Rice 25kg",
+    price: 35000,
+    quantity: 2,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525414/Mask_group_zcqtxh.png",
+  },
+  {
+    id: '2',
+    name: "Kings Oil 5kg",
+    price: 11000,
+    quantity: 25,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newoil_bkd6wm.png",
+  },
+  {
+    id: '3',
+    name: "Knorr Chicken Cubes ",
+    price: 1500,
+    quantity: 5,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newknorr_fdtpel.png",
+  },
+  {
+    id: '4',
+    name: "Maggi Star",
+    price: 1500,
+    quantity: 5,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newmaggi_xqvh4a.png",
+  },
+  {
+    id: '5',
+    name: "Dangote Rice 25kg",
+    price: 35000,
+    quantity: 2,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525414/Mask_group_zcqtxh.png",
+  },
+  {
+    id: '6',
+    name: "Kings Oil 5kg",
+    price: 11000,
+    quantity: 25,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newoil_bkd6wm.png",
+  },
+  {
+    id: '7',
+    name: "Knorr Chicken Cubes ",
+    price: 1500,
+    quantity: 1,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newknorr_fdtpel.png",
+  },
+  {
+    id: '8',
+    name: "Maggi Star",
+    price: 1500,
+    quantity: 5,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newmaggi_xqvh4a.png",
+  },
+  {
+    id: '9',
+    name: "Dangote Rice 25kg",
+    price: 35000,
+    quantity: 2,
+    image: "https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525414/Mask_group_zcqtxh.png",
+  },
+  
+]
