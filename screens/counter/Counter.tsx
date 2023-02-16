@@ -18,7 +18,7 @@ import Colors from '@/constants/Colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ProductScreen from './ProductScreen';
 import CustomersScreen from './CustomersScreen';
-import { CounterScreenNavigation } from '@/interfaces/navigation';
+import { CounterScreenNavigation } from '@/interfaces/navigation/counter';
 
 const SalesTab = createMaterialTopTabNavigator();
 
@@ -101,7 +101,7 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <TouchableRipple
               // onPress={() => console.log('Pressed')}
-              onPress={() => navigation.navigate('NewProduct')}
+              onPress={() => navigation.navigate('NewSale')}
               rippleColor={Colors['white']}
               style={styles.addCard}
             >
@@ -155,12 +155,16 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
                 tabBarIndicatorStyle: {
                   backgroundColor: Colors['black'],
                   width: 50,
-                  marginLeft: 70,
+                  marginLeft: 35,
                 },
                 tabBarLabelStyle: {
                   fontSize: 16,
                   fontFamily: 'Givonic-SemiBold',
                   textTransform: 'none',
+                },
+                tabBarItemStyle: {
+                  width: 120,
+                  // borderWidth: 1,
                 },
                 tabBarPressColor: Colors['transparent'],
               }}

@@ -1,15 +1,15 @@
 import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import HeaderComponent from '@/components/Header/HeaderComponent';
-import {
-  CounterProductsNavigation,
-  CounterProductsRoute,
-} from '@/interfaces/navigation';
 import { allSales } from '@/data/dummy_data';
 import { useRoute } from '@react-navigation/native';
 import { Image } from '@rneui/themed';
 import Colors from '@/constants/Colors';
 import { thousandSeperators } from '@/utils/thousandSeperators';
+import {
+  CounterProductsNavigation,
+  CounterProductsRoute,
+} from '@/interfaces/navigation/counter';
 
 const CounterProduct = ({ navigation }: CounterProductsNavigation) => {
   // const navigation = useNavigation<CounterProductsProps>();
@@ -22,7 +22,7 @@ const CounterProduct = ({ navigation }: CounterProductsNavigation) => {
   // console.log(getss?.getState().routeNames[getss?.getState().index]);
 
   type ProductDetail = {
-    id: string;
+    id: string | number;
     name: string;
     price: number;
     quantity: number;

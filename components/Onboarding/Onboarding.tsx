@@ -11,7 +11,10 @@ import {
 import { Button } from '@rneui/themed';
 import Swiper from 'react-native-swiper';
 import { useAppDispatch } from '@/hooks/redux';
-import { OnboardingProps, RootStackParamList } from '@/interfaces/navigation';
+import {
+  OnboardingProps,
+  RootStackParamList,
+} from '@/interfaces/navigation/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { setOnBoarded } from '@/store/slice/tokenSlice';
 

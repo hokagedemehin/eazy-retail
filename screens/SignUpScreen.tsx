@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
 import Colors from '../constants/Colors';
-import { SignUpProps } from '../interfaces/navigation';
+import { SignUpProps } from '../interfaces/navigation/navigation';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 
 const SignUpScreen = ({ navigation }: SignUpProps) => {
@@ -70,6 +70,14 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
+          theme={{
+            colors: {
+              primary: Colors['black'],
+              text: Colors['black'],
+              placeholder: Colors['white'],
+              background: Colors['white'],
+            },
+          }}
           keyboardType='phone-pad'
         />
       </View>
@@ -82,6 +90,14 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
+          theme={{
+            colors: {
+              primary: Colors['black'],
+              text: Colors['black'],
+              placeholder: Colors['white'],
+              background: Colors['white'],
+            },
+          }}
         />
       </View>
       <View style={styles.inputWrapper}>
@@ -93,6 +109,14 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
+          theme={{
+            colors: {
+              primary: Colors['black'],
+              text: Colors['black'],
+              placeholder: Colors['white'],
+              background: Colors['white'],
+            },
+          }}
         />
       </View>
       <View style={styles.inputWrapper}>
@@ -123,6 +147,14 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
           activeOutlineColor={Colors['black']}
           contentStyle={styles.inputContent}
           outlineStyle={styles.inputOutline}
+          theme={{
+            colors: {
+              primary: Colors['black'],
+              text: Colors['black'],
+              placeholder: Colors['white'],
+              background: Colors['white'],
+            },
+          }}
           secureTextEntry={showPassword ? false : true}
           right={
             <TextInput.Icon
@@ -190,7 +222,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 11,
     // height: 55,
     // fontSize: 12,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
@@ -219,7 +251,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   loginAlternativeWrapper: {
     flexDirection: 'row',
@@ -230,14 +262,14 @@ const styles = StyleSheet.create({
   },
   loginAlternativeText: {
     fontSize: 16,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   loginAlternativeButton: {
     marginLeft: 10,
   },
   loginAlternativeButtonText: {
     fontSize: 16,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-700'],
   },
 });

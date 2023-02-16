@@ -16,7 +16,7 @@ import * as SecureStore from 'expo-secure-store';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './SignUpScreen';
 import SignInScreen from './SignInScreen';
-import { RootStackParamList } from '../interfaces/navigation';
+import { RootStackParamList } from '../interfaces/navigation/navigation';
 // import Colors from '../constants/Colors';
 // import AppIntroSlider from 'react-native-app-intro-slider';
 import OnboardingComp from '../components/Onboarding/Onboarding';

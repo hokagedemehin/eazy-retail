@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { EmptyListSvgComponent } from '@/assets/icons';
+import Colors from '@/constants/Colors';
 
 type EmptyListProps = {
   message: string;
@@ -20,8 +21,8 @@ export default EmptyListComponent;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
+    // flex: 1,
+    backgroundColor: Colors['background'],
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
@@ -32,5 +33,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Givonic-Bold',
     textAlign: 'center',
+    marginVertical: 10,
   },
 });

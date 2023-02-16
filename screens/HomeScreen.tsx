@@ -54,7 +54,7 @@ const HomeScreen = () => {
             height: 60,
             paddingBottom: 7,
             backgroundColor: Colors['white'],
-            display: parentName === 'CounterPage' ? 'none' : 'flex',
+            display: parentName === 'hideScreen' ? 'none' : 'flex',
           },
         }}
       />
@@ -65,7 +65,7 @@ const HomeScreen = () => {
           tabBarLabel: 'Sales',
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: 'Hubhead',
+            fontFamily: 'Givonic-Regular',
           },
           tabBarIcon: ({ focused }) => (
             <SalesSvgComponent
@@ -73,6 +73,12 @@ const HomeScreen = () => {
             />
           ),
           tabBarActiveTintColor: Colors['activeTab'],
+          tabBarStyle: {
+            height: 60,
+            paddingBottom: 7,
+            backgroundColor: Colors['white'],
+            display: parentName === 'hideScreen' ? 'none' : 'flex',
+          },
         }}
       />
       <BottomTab.Screen
@@ -82,7 +88,7 @@ const HomeScreen = () => {
           tabBarLabel: 'Inventory',
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: 'Hubhead',
+            fontFamily: 'Givonic-Regular',
           },
           tabBarIcon: ({ focused }) => (
             <ProductsSvgComponent
@@ -99,7 +105,7 @@ const HomeScreen = () => {
           tabBarLabel: 'Profile',
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: 'Hubhead',
+            fontFamily: 'Givonic-Regular',
           },
           tabBarIcon: ({ focused }) => (
             <UserSvgComponent
@@ -116,7 +122,7 @@ const HomeScreen = () => {
           tabBarLabel: 'More',
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: 'Hubhead',
+            fontFamily: 'Givonic-Regular',
           },
           tabBarIcon: ({ focused }) => (
             <MoreSvgComponent

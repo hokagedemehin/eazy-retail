@@ -14,7 +14,7 @@ import React, {
   useState,
   // useCallback,
 } from 'react';
-import { BusinessLocationProps } from '../interfaces/navigation';
+import { BusinessLocationProps } from '../interfaces/navigation/navigation';
 import Colors from '../constants/Colors';
 import {
   Button,
@@ -42,9 +42,9 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
       },
       headerTintColor: Colors['grey-900'],
       headerTitleStyle: {
-        fontWeight: '600',
+        // fontWeight: '600',
         fontSize: 20,
-        fontFamily: 'Hubhead',
+        fontFamily: 'Givonic-SemiBold',
       },
       headerLeft: () => (
         <IconButton
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 11,
     // height: 40,
     // fontSize: 14,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   actionSheetContainer: {
     paddingBottom: 150,
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // height: 40,
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
 
   searchInputContent: {},
@@ -465,6 +465,6 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
 });

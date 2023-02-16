@@ -2,10 +2,12 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { TouchableRipple } from 'react-native-paper';
 import Colors from '@/constants/Colors';
-import { Icon, Image } from '@rneui/themed';
-import { thousandSeperators } from '@/utils/thousandSeperators';
+// import { Icon, Image } from '@rneui/themed';
+// import { thousandSeperators } from '@/utils/thousandSeperators';
 import { allSales } from '@/data/dummy_data';
-import { ProductNavigation } from '@/interfaces/navigation';
+import SingleProduct from '@/components/SingleProduct.tsx/SingleProduct';
+import EmptyListComponent from '@/components/EmptyList/EmptyList';
+import { ProductNavigation } from '@/interfaces/navigation/counter';
 
 const ProductScreen = ({ navigation }: ProductNavigation) => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -20,7 +22,7 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
   }, [activeFilter]);
 
   type ProductTypes = {
-    id: string;
+    id: string | number;
     name: string;
     price: number;
     quantity: number;
@@ -29,48 +31,55 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
     status: string;
   };
 
+  const nextPageNavigation = (id: string | number) => {
+    navigation.navigate('CounterProduct', {
+      id,
+    });
+  };
+
   const renderProduct = ({ item }: { item: ProductTypes }) => {
     return (
-      <View style={styles.touchableWrapper}>
-        <TouchableRipple
-          onPress={() => {
-            // console.log('pressed');
-            navigation.navigate('CounterProduct', {
-              id: item.id,
-            });
-            // navigation.navigate('CounterProducts', {
-            //   id: item.id,
-            // });
-          }}
-          rippleColor={Colors['background']}
-          style={styles.listCardWrapper}
-        >
-          <>
-            <View style={styles.imageDescription}>
-              <Image
-                source={{
-                  uri: item?.image,
-                }}
-                style={styles.image}
-              />
-              <View style={styles.description}>
-                <Text numberOfLines={1} style={styles.title}>
-                  {item.name}
-                </Text>
-                <Text numberOfLines={1} style={styles.price}>
-                  {item?.quantity} x ₦{thousandSeperators(item?.price)}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.totalPriceWrapper}>
-              <Text numberOfLines={1} style={styles.totalPriceText}>
-                ₦{thousandSeperators(item?.totalPrice)}
-              </Text>
-              <Icon name='chevron-right' />
-            </View>
-          </>
-        </TouchableRipple>
-      </View>
+      // <View style={styles.touchableWrapper}>
+      //   <TouchableRipple
+      //     onPress={() => {
+      //       // console.log('pressed');
+      //       navigation.navigate('CounterProduct', {
+      //         id: item.id,
+      //       });
+      //       // navigation.navigate('CounterProducts', {
+      //       //   id: item.id,
+      //       // });
+      //     }}
+      //     rippleColor={Colors['background']}
+      //     style={styles.listCardWrapper}
+      //   >
+      //     <>
+      //       <View style={styles.imageDescription}>
+      //         <Image
+      //           source={{
+      //             uri: item?.image,
+      //           }}
+      //           style={styles.image}
+      //         />
+      //         <View style={styles.description}>
+      //           <Text numberOfLines={1} style={styles.title}>
+      //             {item.name}
+      //           </Text>
+      //           <Text numberOfLines={1} style={styles.price}>
+      //             {item?.quantity} x ₦{thousandSeperators(item?.price)}
+      //           </Text>
+      //         </View>
+      //       </View>
+      //       <View style={styles.totalPriceWrapper}>
+      //         <Text numberOfLines={1} style={styles.totalPriceText}>
+      //           ₦{thousandSeperators(item?.totalPrice)}
+      //         </Text>
+      //         <Icon name='chevron-right' />
+      //       </View>
+      //     </>
+      //   </TouchableRipple>
+      // </View>
+      <SingleProduct nextPageNavigation={nextPageNavigation} item={item} />
     );
   };
 
@@ -153,8 +162,15 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
         <FlatList
           data={filteredData}
           renderItem={renderProduct}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) =>
+            typeof item.id === 'string' ? item.id : item.id.toString()
+          }
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <EmptyListComponent message='Product is empty' />
+            </View>
+          }
         />
       </View>
     </View>
@@ -197,6 +213,9 @@ const styles = StyleSheet.create({
   contentList: {
     flex: 1,
     // borderWidth: 1,
+  },
+  emptyContainer: {
+    flex: 1,
   },
   touchableWrapper: {
     // borderWidth: 1,

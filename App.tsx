@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, useTheme } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './store/store';
 
@@ -14,6 +14,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+
+  const theme = useTheme();
 
   useEffect(() => {
     async function prepare() {
@@ -61,7 +63,12 @@ export default function App() {
   return (
     <>
       <StoreProvider store={store}>
-        <PaperProvider>
+        <PaperProvider
+          theme={{
+            ...theme,
+            dark: false,
+          }}
+        >
           <NavigationContainer>
             <GestureHandlerRootView
               onLayout={onLayoutRootView}

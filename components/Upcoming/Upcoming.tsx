@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { UpcomingSvgComponent } from '@/assets/icons';
+import Colors from '@/constants/Colors';
 
 const UpcomingComponent = () => {
   return (
@@ -20,7 +21,7 @@ export default UpcomingComponent;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: Colors['background'],
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,

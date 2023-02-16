@@ -8,7 +8,7 @@ import { allCustomers } from '@/data/dummy_data';
 
 const CustomersScreen = () => {
   type CustomerTypes = {
-    id: string;
+    id: string | number;
     name: string;
     numberOfItems: number;
     totalAmount: number;

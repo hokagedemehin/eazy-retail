@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { BackSvgComponent } from '@/assets/icons';
 import { Button } from '@rneui/themed';
-import { handleBack } from '@/interfaces/header';
+import { handleBack } from '@/interfaces/components/header';
 
 const HeaderComponent = ({ title, handleBack }: handleBack) => {
   return (

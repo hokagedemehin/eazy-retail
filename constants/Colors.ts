@@ -17,6 +17,10 @@ const Colors = {
   newSaleBtn: '#183727',
   inputText: '#095256',
   activeFilter: '#9E8CE0',
+  chipText: '#336353',
+  chipBackground: '#CBE1DA',
+  chipShort: '#EC1D1D',
+  chipShortBackground: '#F7DADA',
 // ******************************************************
   
   transparent: 'transparent',

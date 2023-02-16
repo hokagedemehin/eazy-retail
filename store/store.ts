@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import tokenReducer from './slice/tokenSlice'
 import hideTabsReducer from './slice/hideTabsSlice'
+import newSaleReducer from './slice/newSaleSlice'
+import saleSummaryReducer from './slice/saleSummarySlice'
 
 export const store = configureStore({
   reducer: {
     token: tokenReducer,
     hideTabs: hideTabsReducer,
+    newSale: newSaleReducer,
+    saleSummary: saleSummaryReducer,
   },
 })
 

@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect } from 'react';
-import { BusinessNameProps } from '../interfaces/navigation';
+import { BusinessNameProps } from '../interfaces/navigation/navigation';
 import Colors from '../constants/Colors';
 import { Button, IconButton, TextInput } from 'react-native-paper';
 import { BackSvgComponent } from '@/assets/icons';
@@ -104,13 +104,13 @@ const styles = StyleSheet.create({
     color: Colors['grey-800'],
     marginTop: 15,
     marginBottom: 15,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   input: {
     // paddingVertical: 10,
     // height: 60,
     fontSize: 24,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
@@ -153,6 +153,6 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
 });

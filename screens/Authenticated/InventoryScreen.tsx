@@ -1,21 +1,22 @@
-import { Platform, SafeAreaView, StyleSheet } from 'react-native';
 import React from 'react';
-import UpcomingComponent from '@/components/Upcoming/Upcoming';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import InventoryHome from '../inventory/InventoryHome';
+import AddProductScreen from '../inventory/NewProductScreen';
+
+const InventoryStack = createNativeStackNavigator();
 
 const InventoryScreen = () => {
   return (
-    <SafeAreaView style={styles.safeAreaStyle}>
-      <UpcomingComponent />
-    </SafeAreaView>
+    <InventoryStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <InventoryStack.Screen name='InventoryHome' component={InventoryHome} />
+      <InventoryStack.Screen name='AddProduct' component={AddProductScreen} />
+    </InventoryStack.Navigator>
   );
 };
 
 export default InventoryScreen;
-
-const styles = StyleSheet.create({
-  safeAreaStyle: {
-    flex: 1,
-    paddingTop: Platform.OS === 'android' ? 25 : 10,
-    backgroundColor: 'white',
-  },
-});

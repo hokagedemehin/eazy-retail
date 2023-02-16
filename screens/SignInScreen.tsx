@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
-import { SignInProps } from '../interfaces/navigation';
+import { SignInProps } from '../interfaces/navigation/navigation';
 import Colors from '../constants/Colors';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 
@@ -52,6 +52,14 @@ const SignInScreen = ({ navigation }: SignInProps) => {
             activeOutlineColor={Colors['black']}
             contentStyle={styles.inputContent}
             outlineStyle={styles.inputOutline}
+            theme={{
+              colors: {
+                primary: Colors['black'],
+                text: Colors['black'],
+                placeholder: Colors['white'],
+                background: Colors['white'],
+              },
+            }}
           />
         </View>
         <View style={styles.passwordInputWrapper}>
@@ -62,6 +70,14 @@ const SignInScreen = ({ navigation }: SignInProps) => {
             activeOutlineColor={Colors['black']}
             contentStyle={styles.inputContent}
             outlineStyle={styles.inputOutline}
+            theme={{
+              colors: {
+                primary: Colors['black'],
+                text: Colors['black'],
+                placeholder: Colors['white'],
+                background: Colors['white'],
+              },
+            }}
             secureTextEntry={showPassword ? false : true}
             autoCapitalize='none'
             right={
@@ -131,7 +147,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-900'],
     marginBottom: 20,
     // marginTop: 10,
@@ -152,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   input: {
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
@@ -170,7 +186,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     fontSize: 16,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-700'],
   },
   buttonWrapper: {
@@ -188,7 +204,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   signupAlternativeWrapper: {
     flexDirection: 'row',
@@ -198,14 +214,14 @@ const styles = StyleSheet.create({
   },
   signupAlternativeText: {
     fontSize: 16,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   signupAlternativeButton: {
     marginLeft: 10,
   },
   signupAlternativeButtonText: {
     fontSize: 16,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-700'],
   },
 });

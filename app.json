@@ -4,36 +4,35 @@
     "slug": "easy-retail",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/AppIcons/appstore.png",
+    "icon": "./assets/easylogo3.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/easy-splash.png",
+      "image": "./assets/easyspalsh2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/AppIcons/appstore.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/easylogo3.png",
+        "backgroundColor": "#336353"
       },
       "package": "com.demibk.easyretail"
     },
     "web": {
-      "favicon": "./assets/AppIcons/android/mipmap-hdpi/ic_launcher.png"
+      "favicon": "./assets/easylogo3.png"
     },
     "extra": {
       "eas": {
         "projectId": "1b05b21e-d2c1-4c55-b697-5ad285b91f45"
       }
-    }
+    },
+    "plugins": ["expo-community-flipper"]
   }
 }

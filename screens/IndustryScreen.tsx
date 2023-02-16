@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { IndustryProps } from '../interfaces/navigation';
+import { IndustryProps } from '../interfaces/navigation/navigation';
 import Colors from '../constants/Colors';
 import {
   Button,
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-900'],
     marginBottom: 20,
   },
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
 
   cardText: {
     fontSize: 14,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-900'],
     textAlign: 'center',
     // width: '100%',
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
 
   cardOtherText: {
     fontSize: 14,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['white'],
   },
   inputWrapper: {
@@ -409,20 +409,20 @@ const styles = StyleSheet.create({
   },
   inputOtherLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-900'],
     marginTop: 10,
     marginHorizontal: 20,
   },
   helperOtherText: {
     fontSize: 12,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-400'],
     // marginHorizontal: 20,
   },
   inputLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-900'],
     marginBottom: 5,
   },
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 10,
     height: 60,
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
   buttonContent: {
     // borderWidth: 1,

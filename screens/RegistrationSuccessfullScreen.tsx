@@ -2,7 +2,7 @@ import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
 import { Button } from 'react-native-paper';
-import { RegistrationSuccessfullProps } from '../interfaces/navigation';
+import { RegistrationSuccessfullProps } from '../interfaces/navigation/navigation';
 import { Image } from '@rneui/themed';
 
 const RegistrationSuccessfullScreen = ({
@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
   },
   successText: {
     fontSize: 24,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     textAlign: 'center',
     marginTop: 20,
   },
   successSubText: {
     fontSize: 14,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
     textAlign: 'center',
     marginTop: 20,
     width: '70%',
@@ -105,6 +105,6 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 18,
-    fontFamily: 'Hubhead',
+    fontFamily: 'Givonic-SemiBold',
   },
 });
