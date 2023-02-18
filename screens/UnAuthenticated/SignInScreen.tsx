@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
-import { SignInProps } from '../interfaces/navigation/navigation';
-import Colors from '../constants/Colors';
+import { SignInProps } from '../../interfaces/navigation/navigation';
+import Colors from '../../constants/Colors';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 
 const SignInScreen = ({ navigation }: SignInProps) => {

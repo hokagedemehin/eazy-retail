@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import ProductsCategoryPage from './ProductsCategoryPage';
+import React from 'react';
 import Colors from '@/constants/Colors';
 import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import EmptyListComponent from '@/components/EmptyList/EmptyList';
-import { Button } from '@rneui/themed';
-import { InventoryHomeProps } from '@/interfaces/navigation/inventory';
+// import AllCategoryPage from './AllCategoryPage';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import AllProductListScreen from './products/AllProductListScreen';
+import AllCategoryListScreen from './category/AllCategoryListScreen';
 
-const InventoryHome = ({ navigation }: Omit<InventoryHomeProps, 'route'>) => {
-  const [section, setSection] = useState('products');
+const ProductCategoryTab = createMaterialTopTabNavigator();
 
+const InventoryHome = () => {
   return (
     <SafeAreaView style={styles.safeAreaStyle}>
       <View style={styles.container}>
@@ -16,41 +16,53 @@ const InventoryHome = ({ navigation }: Omit<InventoryHomeProps, 'route'>) => {
           <View>
             <Text style={styles.headerText}>Inventory</Text>
           </View>
-          <View style={styles.sectionsButtonWrapper}>
-            <Button
-              title='Products'
-              type={section === 'products' ? 'solid' : 'clear'}
-              titleStyle={
-                section === 'products' ? styles.activeBtnText : styles.btnText
-              }
-              onPress={() => setSection('products')}
-              buttonStyle={
-                section === 'products'
-                  ? styles.activeSectionBtn
-                  : styles.sectionBtn
-              }
-            />
-            <Button
-              title='Category'
-              type={section === 'category' ? 'solid' : 'clear'}
-              titleStyle={
-                section === 'category' ? styles.activeBtnText : styles.btnText
-              }
-              onPress={() => setSection('category')}
-              buttonStyle={
-                section === 'category'
-                  ? styles.activeSectionBtn
-                  : styles.sectionBtn
-              }
-            />
-          </View>
         </View>
-        {section === 'products' && (
-          <ProductsCategoryPage navigation={navigation} />
-        )}
-        {section === 'category' && (
-          <EmptyListComponent message='Category is empty' />
-        )}
+        <View style={styles.navigationWrapper}>
+          <ProductCategoryTab.Navigator
+            screenOptions={{
+              tabBarStyle: {
+                elevation: 0,
+                borderBottomLeftRadius: 20,
+                borderBottomRightRadius: 20,
+              },
+              tabBarPressColor: Colors['transparent'],
+              // tabBarPressOpacity: 1,
+            }}
+          >
+            <ProductCategoryTab.Screen
+              name='AllProductList'
+              component={AllProductListScreen}
+              options={{
+                tabBarIndicator: () => null,
+                tabBarLabel: ({ focused }) => (
+                  <Text
+                    style={
+                      focused ? styles.activeTabLabel : styles.inactiveTabLabel
+                    }
+                  >
+                    Products
+                  </Text>
+                ),
+              }}
+            />
+            <ProductCategoryTab.Screen
+              name='AllCategoryList'
+              component={AllCategoryListScreen}
+              options={{
+                tabBarIndicator: () => null,
+                tabBarLabel: ({ focused }) => (
+                  <Text
+                    style={
+                      focused ? styles.activeTabLabel : styles.inactiveTabLabel
+                    }
+                  >
+                    Category
+                  </Text>
+                ),
+              }}
+            />
+          </ProductCategoryTab.Navigator>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -75,40 +87,69 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
+  navigationWrapper: {
+    flex: 1,
+  },
   headerText: {
     fontSize: 24,
     // fontWeight: 'bold',
     color: Colors['black'],
     fontFamily: 'Givonic-Bold',
   },
-  sectionsButtonWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  sectionBtn: {
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 50,
-    // backgroundColor: Colors['activeFilter'],
-    // overflow: 'hidden',
-    // elevation: 2,
-  },
-  activeSectionBtn: {
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 50,
+  activeTabLabel: {
+    fontSize: 18,
+    fontFamily: 'Givonic-SemiBold',
+    textTransform: 'none',
     backgroundColor: Colors['activeFilter'],
-    // overflow: 'hidden',
-    // elevation: 2,
-  },
-  btnText: {
-    color: Colors['black'],
-    fontFamily: 'Givonic-SemiBold',
-  },
-  activeBtnText: {
+    width: 170,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    borderRadius: 20,
     color: Colors['white'],
-    fontFamily: 'Givonic-SemiBold',
+    textAlign: 'center',
+    // borderWidth: 1,
   },
+  inactiveTabLabel: {
+    fontSize: 18,
+    fontFamily: 'Givonic-SemiBold',
+    textTransform: 'none',
+    backgroundColor: Colors['white'],
+    width: 170,
+    textAlign: 'center',
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    borderRadius: 20,
+    color: Colors['black'],
+    // borderWidth: 1,
+  },
+  // sectionsButtonWrapper: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around',
+  //   alignItems: 'center',
+  //   marginTop: 10,
+  // },
+  // sectionBtn: {
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 40,
+  //   borderRadius: 50,
+  //   // backgroundColor: Colors['activeFilter'],
+  //   // overflow: 'hidden',
+  //   // elevation: 2,
+  // },
+  // activeSectionBtn: {
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 40,
+  //   borderRadius: 50,
+  //   backgroundColor: Colors['activeFilter'],
+  //   // overflow: 'hidden',
+  //   // elevation: 2,
+  // },
+  // btnText: {
+  //   color: Colors['black'],
+  //   fontFamily: 'Givonic-SemiBold',
+  // },
+  // activeBtnText: {
+  //   color: Colors['white'],
+  //   fontFamily: 'Givonic-SemiBold',
+  // },
 });

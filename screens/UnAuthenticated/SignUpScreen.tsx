@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useState } from 'react';
-import Colors from '../constants/Colors';
-import { SignUpProps } from '../interfaces/navigation/navigation';
+import Colors from '../../constants/Colors';
+import { SignUpProps } from '../../interfaces/navigation/navigation';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 
 const SignUpScreen = ({ navigation }: SignUpProps) => {

@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect } from 'react';
-import { BusinessNameProps } from '../interfaces/navigation/navigation';
-import Colors from '../constants/Colors';
+import { BusinessNameProps } from '../../interfaces/navigation/navigation';
+import Colors from '../../constants/Colors';
 import { Button, IconButton, TextInput } from 'react-native-paper';
 import { BackSvgComponent } from '@/assets/icons';
 

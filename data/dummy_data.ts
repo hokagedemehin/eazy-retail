@@ -260,3 +260,47 @@ export const allProductsList = [
   },
 
 ]
+
+export const allCategory = [
+  {
+    id: '1',
+    name: 'Spices',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/spices_n1otp2.jpg'
+  },
+  {
+    id: '2',
+    name: 'Oil',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/oil_xemto2.jpg',
+  },
+  {
+    id: '3',
+    name: 'Farm Produce',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/farm_rehpjk.jpg',
+  },
+  {
+    id: '4',
+    name: 'Beverages',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676682897/beverages_s1wk0u.webp',
+  },
+  {
+    id: '5',
+    name: 'Cereals',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676683088/cereal_lxumas.jpg',
+  },
+  {
+    id: '6',
+    name: 'Fruits',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/fruits_mg7dis.jpg',
+  },
+  {
+    id: '7',
+    name: 'Vegetables',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/peppers_eqptjb.jpg',
+
+  },
+  {
+    id: '8',
+    name: 'Meat',
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/meat_vymw2h.jpg',
+  },
+]

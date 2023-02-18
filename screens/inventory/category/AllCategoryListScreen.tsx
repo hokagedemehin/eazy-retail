@@ -1,22 +1,19 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { allProductsList } from '@/data/dummy_data';
+import { allCategory } from '@/data/dummy_data';
 import { TouchableRipple } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 import { Icon, Image } from '@rneui/themed';
-import { ProductsCategoryScreenProps } from '@/interfaces/navigation/inventory';
+import { AllCategoryListProps } from '@/interfaces/navigation/inventory';
 
-const AllProductList = ({
+const AllCategoryListScreen = ({
   navigation,
-}: Omit<ProductsCategoryScreenProps, 'route'>) => {
-  const [productsList, setProductsList] = useState([
+}: Omit<AllCategoryListProps, 'route'>) => {
+  const [categoryList, setCategoryList] = useState([
     {
       id: '0',
-      name: 'add new product',
-      price: 1000,
-      quantity: 10,
+      name: 'add new category',
       image: '',
-      expiring_date: '',
     },
   ]);
 
@@ -24,39 +21,27 @@ const AllProductList = ({
     const newData = [
       {
         id: '0',
-        name: 'add new product',
-        price: 1000,
-        quantity: 10,
+        name: 'add new category',
         image: '',
-        expiring_date: '',
       },
     ];
-    allProductsList.forEach((product) => {
-      newData.push(product);
+    allCategory.forEach((category) => {
+      newData.push(category);
     });
-    setProductsList(newData);
+    setCategoryList(newData);
     return () => {
-      setProductsList([]);
+      setCategoryList([]);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  type ProductTypes = {
-    id: string | number;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-    expiring_date: string;
-  };
-
-  const renderProducts = ({ item }: { item: ProductTypes }) => {
-    if (item.name === 'add new product') {
+  // ********************** FLATLIST RENDERING **********************
+  const renderCategory = ({ item }: { item: (typeof categoryList)[0] }) => {
+    if (item.name === 'add new category') {
       return (
-        <View style={styles.addProductcontent}>
+        <View style={styles.addCategorycontent}>
           <TouchableRipple
             // onPress={() => console.log('Pressed')}
-            onPress={() => navigation.navigate('AddProduct')}
+            onPress={() => navigation.navigate('AddCategory')}
             rippleColor={Colors['white']}
             style={styles.addCard}
           >
@@ -65,7 +50,7 @@ const AllProductList = ({
                 <Icon name='add' size={40} color={Colors['white']} />
               </View>
               <View style={styles.addCardText}>
-                <Text style={styles.addCardTextContent}>Add New Product</Text>
+                <Text style={styles.addCardTextContent}>Add New Category</Text>
               </View>
             </>
           </TouchableRipple>
@@ -82,12 +67,9 @@ const AllProductList = ({
               style={styles.image}
             />
           </View>
-          <View style={styles.namePriceWrapper}>
+          <View style={styles.nameWrapper}>
             <Text numberOfLines={1} style={styles.name}>
               {item.name}
-            </Text>
-            <Text numberOfLines={1} style={styles.price}>
-              ₦{item.price}
             </Text>
           </View>
         </View>
@@ -98,8 +80,8 @@ const AllProductList = ({
   return (
     <View style={styles.container}>
       <FlatList
-        data={productsList}
-        renderItem={renderProducts}
+        data={categoryList}
+        renderItem={renderCategory}
         keyExtractor={(item) => item.id}
         numColumns={2}
         showsVerticalScrollIndicator={false}
@@ -112,7 +94,7 @@ const AllProductList = ({
   );
 };
 
-export default AllProductList;
+export default AllCategoryListScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -139,10 +121,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 200,
-    height: 150,
+    height: 120,
     // resizeMode: 'contain',
   },
-  namePriceWrapper: {
+  nameWrapper: {
     paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: Colors['white'],
@@ -159,14 +141,9 @@ const styles = StyleSheet.create({
     color: Colors['black'],
     // borderWidth: 1,
   },
-  price: {
-    fontSize: 16,
-    fontFamily: 'Givonic-SemiBold',
-    color: Colors['black'],
-  },
 
-  // ****************** add new product card ******************
-  addProductcontent: {
+  // ****************** add new category card ******************
+  addCategorycontent: {
     width: '45%',
     // borderWidth: 1,
     justifyContent: 'center',
@@ -178,7 +155,7 @@ const styles = StyleSheet.create({
   },
   addCard: {
     width: '100%',
-    height: 205,
+    height: 155,
     // height: '15%',
     // paddingVertical: 50,
     backgroundColor: Colors['newSale'],

@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { allProductsList } from '../../data/dummy_data';
+import { allProductsList } from '../../../data/dummy_data';
 import Colors from '@/constants/Colors';
 import { Image } from '@rneui/themed';
 
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     // borderWidth: 1,
+    backgroundColor: Colors['background'],
   },
   content: {
     position: 'relative',

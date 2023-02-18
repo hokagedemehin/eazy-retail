@@ -1,4 +1,4 @@
-import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Colors from '@/constants/Colors';
 import EmptyListComponent from '@/components/EmptyList/EmptyList';
@@ -7,8 +7,8 @@ import { allProductsList } from '@/data/dummy_data';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import AllProductList from './AllProductList';
 import LowStockList from './LowStockList';
-import ExpiredList from './ExpiredList';
-import { InventoryHomeNavigation } from '@/interfaces/navigation/inventory';
+import ExpiringList from './ExpiredList';
+// import { InventoryHomeNavigation } from '@/interfaces/navigation/inventory';
 
 type IProductTypes = Array<{
   id: string | number;
@@ -20,7 +20,8 @@ type IProductTypes = Array<{
 }>;
 
 const ProductsTab = createMaterialTopTabNavigator();
-const ProductsCategoryPage = ({ navigation }: InventoryHomeNavigation) => {
+
+const AllProductListScreen = () => {
   const [productsCheck, setProductsCheck] = useState<IProductTypes>([]);
 
   useEffect(() => {
@@ -44,8 +45,8 @@ const ProductsCategoryPage = ({ navigation }: InventoryHomeNavigation) => {
             <Button
               type='solid'
               title={`Add Item`}
-              // onPress={() => console.log('pressed')}
-              onPress={() => navigation.navigate('AddProduct')}
+              onPress={() => console.log('pressed')}
+              // onPress={() => navigation.navigate('AddProduct')}
               radius={10}
               buttonStyle={{
                 backgroundColor: Colors['black'],
@@ -97,10 +98,10 @@ const ProductsCategoryPage = ({ navigation }: InventoryHomeNavigation) => {
                 }}
               />
               <ProductsTab.Screen
-                name='ExpiredProducts'
-                component={ExpiredList}
+                name='ExpiringProducts'
+                component={ExpiringList}
                 options={{
-                  tabBarLabel: 'Expired',
+                  tabBarLabel: 'Expiring',
                 }}
               />
             </ProductsTab.Navigator>
@@ -111,12 +112,12 @@ const ProductsCategoryPage = ({ navigation }: InventoryHomeNavigation) => {
   );
 };
 
-export default ProductsCategoryPage;
+export default AllProductListScreen;
 
 const styles = StyleSheet.create({
   safeAreaStyle: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 10 : 10,
+    // paddingTop: Platform.OS === 'android' ? 10 : 10,
     backgroundColor: Colors['white'],
   },
   container: {

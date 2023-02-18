@@ -1,8 +1,8 @@
 import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 import { Button } from 'react-native-paper';
-import { RegistrationSuccessfullProps } from '../interfaces/navigation/navigation';
+import { RegistrationSuccessfullProps } from '../../interfaces/navigation/navigation';
 import { Image } from '@rneui/themed';
 
 const RegistrationSuccessfullScreen = ({
@@ -17,7 +17,7 @@ const RegistrationSuccessfullScreen = ({
       <View style={styles.successContainer}>
         <View style={styles.successContent}>
           <Image
-            source={require('../assets/onboarding/celebration.png')}
+            source={require('../../assets/onboarding/celebration.png')}
             style={styles.successImage}
           />
 

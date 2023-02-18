@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { allProductsList } from '../../data/dummy_data';
+import { allProductsList } from '../../../data/dummy_data';
 import Colors from '@/constants/Colors';
 import { Image } from '@rneui/themed';
 
-const ExpiredList = () => {
+const ExpiringList = () => {
   type IProductTypes = {
     id: string | number;
     name: string;
@@ -77,12 +77,13 @@ const ExpiredList = () => {
   );
 };
 
-export default ExpiredList;
+export default ExpiringList;
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     // borderWidth: 1,
+    backgroundColor: Colors['background'],
   },
   content: {
     position: 'relative',

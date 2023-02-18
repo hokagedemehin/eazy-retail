@@ -14,8 +14,8 @@ import React, {
   useState,
   // useCallback,
 } from 'react';
-import { BusinessLocationProps } from '../interfaces/navigation/navigation';
-import Colors from '../constants/Colors';
+import { BusinessLocationProps } from '../../interfaces/navigation/navigation';
+import Colors from '../../constants/Colors';
 import {
   Button,
   IconButton,

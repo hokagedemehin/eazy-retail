@@ -14,17 +14,17 @@ import { setOnBoarded, setToken } from '../store/slice/tokenSlice';
 import * as SecureStore from 'expo-secure-store';
 // import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignUpScreen from './SignUpScreen';
-import SignInScreen from './SignInScreen';
+import SignUpScreen from './UnAuthenticated/SignUpScreen';
+import SignInScreen from './UnAuthenticated/SignInScreen';
 import { RootStackParamList } from '../interfaces/navigation/navigation';
 // import Colors from '../constants/Colors';
 // import AppIntroSlider from 'react-native-app-intro-slider';
 import OnboardingComp from '../components/Onboarding/Onboarding';
-import BusinessLocationScreen from './BusinessLocationScreen';
-import IndustryScreen from './IndustryScreen';
-import RegistrationSuccessfullScreen from './RegistrationSuccessfullScreen';
+import BusinessLocationScreen from './UnAuthenticated/BusinessLocationScreen';
+import IndustryScreen from './UnAuthenticated/IndustryScreen';
+import RegistrationSuccessfullScreen from './UnAuthenticated/RegistrationSuccessfullScreen';
 import HomeScreen from './HomeScreen';
-import BusinessNameScreen from './BusinessNameScreen';
+import BusinessNameScreen from './UnAuthenticated/BusinessNameScreen';
 // import { useNavigation } from '@react-navigation/native';
 
 const AllScreens = () => {

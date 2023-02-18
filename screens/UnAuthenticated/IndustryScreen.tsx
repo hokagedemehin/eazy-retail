@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { IndustryProps } from '../interfaces/navigation/navigation';
-import Colors from '../constants/Colors';
+import { IndustryProps } from '../../interfaces/navigation/navigation';
+import Colors from '../../constants/Colors';
 import {
   Button,
   IconButton,
