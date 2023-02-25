@@ -9,6 +9,7 @@ import * as Font from 'expo-font';
 import { Provider as PaperProvider, useTheme } from 'react-native-paper';
 import { Provider as StoreProvider } from 'react-redux';
 import { store } from './store/store';
+import { ToastProvider } from 'react-native-toast-notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -74,7 +75,9 @@ export default function App() {
               onLayout={onLayoutRootView}
               style={styles.container}
             >
-              <AllScreens />
+              <ToastProvider placement='top'>
+                <AllScreens />
+              </ToastProvider>
             </GestureHandlerRootView>
           </NavigationContainer>
         </PaperProvider>

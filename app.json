@@ -33,6 +33,6 @@
         "projectId": "1b05b21e-d2c1-4c55-b697-5ad285b91f45"
       }
     },
-    "plugins": ["expo-community-flipper"]
+    "plugins": ["expo-community-flipper", "expo-image-picker"]
   }
 }

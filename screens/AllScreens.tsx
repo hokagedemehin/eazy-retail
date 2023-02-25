@@ -25,6 +25,7 @@ import IndustryScreen from './UnAuthenticated/IndustryScreen';
 import RegistrationSuccessfullScreen from './UnAuthenticated/RegistrationSuccessfullScreen';
 import HomeScreen from './HomeScreen';
 import BusinessNameScreen from './UnAuthenticated/BusinessNameScreen';
+import PhoneVerificationScreen from './UnAuthenticated/PhoneVerification';
 // import { useNavigation } from '@react-navigation/native';
 
 const AllScreens = () => {
@@ -107,6 +108,13 @@ const AllScreens = () => {
             />
             <Stack.Screen name='SignIn' component={SignInScreen} />
             <Stack.Screen name='SignUp' component={SignUpScreen} />
+            <Stack.Screen
+              name='PhoneVerification'
+              component={PhoneVerificationScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
             <Stack.Screen name='BusinessName' component={BusinessNameScreen} />
             <Stack.Screen
               name='BusinessLocation'

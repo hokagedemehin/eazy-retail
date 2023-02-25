@@ -31,6 +31,7 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
     // function
     (value) => {
       // setSearchValue(value);
+      // console.log(value);
       handleSearch(value);
     },
     // delay in ms
@@ -71,13 +72,6 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
       selectedSales.forEach((item) => {
         const foundObj = tempArr.find((product) => product.id === item.id);
         if (foundObj) {
-          // console.log('foundObj :>> ', foundObj);
-          // const obj = {
-          //   ...foundObj,
-          //   changeQuantity: item.changeQuantity,
-          //   total: item.total,
-          // };
-          // tempArr.push(obj);
           // get the index of the foundObj in the productData and change the quantity of the productData to the quantity of the selectedSales
           const index = tempArr.findIndex(
             (product) => product.id === foundObj.id
@@ -85,11 +79,6 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
           tempArr[index] = item;
           //  add the id to the selectedIds
           setSelectedIds((prev) => new Set(prev.add(item.id)));
-          // setSelectedIds((prev) => new Set([...prev, id]));
-          // tempArr[index].changeQuantity = item.changeQuantity;
-          // tempArr[index].total = item.total;
-          // const tempArr = [...productData];
-          // setProductData(tempArr);
         }
       });
       setProductData(tempArr);
@@ -118,31 +107,31 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
   }, [selectedSales]);
 
   // ******************** ALL DATA FROM ENDPOINT ***********************
-  useEffect(() => {
-    if (allProducts) {
-      const tempArr = [] as IProduct;
-      allProducts.forEach((item) => {
-        const obj = {
-          ...item,
-          discount: 0,
-          discountPercent: 0,
-          sellingPrice: item.price,
-          isFree: false,
-          isGift: false,
-          changeQuantity: 0,
-          total: 0,
-        };
-        tempArr.push(obj);
-      });
-      setProductData(tempArr);
-      setSearchData(tempArr);
-    }
-    return () => {
-      setSearchData([]);
-      setProductData([]);
-      // dispatch(addSale([]));
-    };
-  }, []);
+  // useEffect(() => {
+  //   if (allProducts) {
+  //     const tempArr = [] as IProduct;
+  //     allProducts.forEach((item) => {
+  //       const obj = {
+  //         ...item,
+  //         discount: 0,
+  //         discountPercent: 0,
+  //         sellingPrice: item.price,
+  //         isFree: false,
+  //         isGift: false,
+  //         changeQuantity: 0,
+  //         total: 0,
+  //       };
+  //       tempArr.push(obj);
+  //     });
+  //     setProductData(tempArr);
+  //     setSearchData(tempArr);
+  //   }
+  //   return () => {
+  //     setSearchData([]);
+  //     setProductData([]);
+  //     // dispatch(addSale([]));
+  //   };
+  // }, []);
 
   // ****************** GO BACK ******************
   const handleBack = () => {
@@ -153,16 +142,6 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
   };
 
   // ****************** ADD PRODUCT ******************
-  // type AddProductType = Array<{
-  //   id: string | number,
-  //   name: string,
-  //   price: number,
-  //   quantity: number,
-  //   image: string,
-  //   changeQuantity: number,
-  //   total: number,
-  // }>
-  // const [selectedProducts, setSelectedProducts] = useState<AddProductType>([]);
   const [selectedIds, setSelectedIds] = useState(new Set());
 
   // console.log('selectedIds :>> ', selectedIds);
@@ -171,46 +150,16 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
   // ************************* CONFIRM SALE *************************
   const handleAddProduct = () => {
     // convert the selectedIds to an array
+
     const selectedIdsArray = Array.from(selectedIds);
-    // if (selectedIdsArray.length === 0 && selectedSales.length !== 0) {
-    //   navigation.navigate('ConfirmSale');
-    //   return;
-    // } else if (selectedIdsArray.length !== 0 && selectedSales.length !== 0) {
-    //   const filterProduct = selectedIdsArray.map((id) => {
-    //     // if the id is already in the selectedSales, then change the quantity of the selectedSales
-    //     const foundObj = selectedSales.find((item) => item.id === id);
-    //     if (foundObj) {
-    //       const index = selectedSales.findIndex(
-    //         (product) => product.id === foundObj.id
-    //       );
-    //       // selectedSales[index].changeQuantity =
-    //       //   foundObj.changeQuantity + 1;
-    //       selectedSales[index].total =
-    //         foundObj.price * selectedSales[index].changeQuantity;
-    //       dispatch(addSale(selectedSales));
-    //       navigation.navigate('ConfirmSale');
-    //       setSelectedIds(new Set());
-    //       return;
-    //     } else {
-    //       const foundObj = productData.find((item) => item.id === id) as products;
-    //       const total = foundObj.price * foundObj.changeQuantity;
-    //       return {
-    //         ...foundObj,
-    //         total,
-    //       };
-    //     }
+    // console.log('selectedIdsArray :>> ', selectedIdsArray);
 
-    //   });
-    //   const tempArr = [...selectedSales, ...filterProduct] as IProduct;
-    //   dispatch(addSale(tempArr));
-    //   navigation.navigate('ConfirmSale');
-    //   setSelectedIds(new Set());
-    //   return;
-    // }
-
+    // console.log('productData :>> ', productData);
+    // console.log('searchData :>> ', searchData);
     // from each id in the selectedIdsArray, get the product from the productData and add it to the selectedProducts
     const filterProduct = selectedIdsArray.map((id) => {
-      const foundObj = productData.find((item) => item.id === id) as products;
+      const foundObj = searchData.find((item) => item.id === id) as products;
+      // console.log(foundObj);
       const total = foundObj.sellingPrice * foundObj.changeQuantity;
       return {
         ...foundObj,
@@ -230,11 +179,15 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
   function handleQuantity(type: string, id: string | number) {
     // get the product from productData with the id and increase the changeQuantity by 1
     let product = productData.find((item) => item.id === id) as products;
-
+    let searchProduct = searchData.find((item) => item.id === id) as products;
     if (type === 'plus') {
       product = {
         ...product,
         changeQuantity: product.changeQuantity + 1,
+      };
+      searchProduct = {
+        ...searchProduct,
+        changeQuantity: searchProduct.changeQuantity + 1,
       };
       setSelectedIds((prev) => new Set([...prev, id]));
       // use splice to update the productData with the newProductObj
@@ -243,16 +196,22 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
         ...product,
         changeQuantity: product.changeQuantity - 1,
       };
+      searchProduct = {
+        ...searchProduct,
+        changeQuantity: searchProduct.changeQuantity - 1,
+      };
       if (product.changeQuantity === 0) {
         setSelectedIds((prev) => {
           const newSet = new Set(prev);
           newSet.delete(id);
           return newSet;
         });
-        const filterSelectedSales = selectedSales.filter(
-          (item) => item.id !== id
-        );
-        dispatch(addSale(filterSelectedSales));
+        // const filterSelectedSales = selectedSales.filter(
+        //   (item) => item.id !== id
+        // );
+        // console.log('selectedSales :>> ', selectedSales);
+        // console.log('filterSelectedSales :>> ', filterSelectedSales);
+        // dispatch(addSale(filterSelectedSales));
       }
     }
 
@@ -263,10 +222,17 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
       return item;
     });
 
+    const newSearchData = searchData.map((item) => {
+      if (item.id === id) {
+        return searchProduct;
+      }
+      return item;
+    });
+
     // console.log('newProductData :>> ', newProductData[0]);
 
     setProductData(newProductData);
-
+    setSearchData(newSearchData);
     // return product;
   }
 
@@ -406,15 +372,15 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
   const [searchData, setSearchData] = useState<IProduct>([]);
 
   const handleSearch = (value: string) => {
-    if (value !== '' && searchData.length > 0) {
+    if (value !== '') {
       const tempArr = [] as IProduct;
-      productData.forEach((item) => {
+      searchData.forEach((item) => {
         if (item.name.toLowerCase().includes(value.toLowerCase())) {
           tempArr.push(item);
         }
       });
       setProductData(tempArr);
-    } else if (value === '' && searchData.length > 0) {
+    } else if (value === '') {
       setProductData(searchData);
     }
   };

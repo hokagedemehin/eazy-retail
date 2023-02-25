@@ -1189,6 +1189,36 @@ const CreditPaymentSvgComponent = () => (
   </Svg>
 );
 
+const CategoryImageUploadSvgComponent = () => {
+  return (
+    <Svg width={28} height={28} viewBox='0 0 28 28' fill='none'>
+      <Path
+        clipRule='evenodd'
+        d='M26.28 8.533V19.4c0 4.026-2.52 6.866-6.547 6.866H8.2c-4.027 0-6.533-2.84-6.533-6.866V8.533c0-4.027 2.52-6.865 6.533-6.865h11.533c4.027 0 6.547 2.838 6.547 6.865z'
+        stroke='#414549'
+        strokeWidth={2}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <Path
+        d='M5.042 19.91l2.038-2.151a1.873 1.873 0 012.71-.011l1.18 1.204a1.91 1.91 0 002.841-.125l2.972-3.615a2.249 2.249 0 013.353-.139l2.768 2.856'
+        stroke='#414549'
+        strokeWidth={2}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <Path
+        clipRule='evenodd'
+        d='M11.751 10.179a2.339 2.339 0 11-4.675 0 2.339 2.339 0 014.675 0z'
+        stroke='#414549'
+        strokeWidth={2}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </Svg>
+  );
+};
+
 export {
   BackSvgComponent,
   SkinCareSvgComponent,
@@ -1212,4 +1242,5 @@ export {
   CashPaymentSvgComponent,
   CardPaymentSvgComponent,
   CreditPaymentSvgComponent,
+  CategoryImageUploadSvgComponent,
 };

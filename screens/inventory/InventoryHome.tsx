@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 10,
     backgroundColor: Colors['white'],
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    // borderBottomLeftRadius: 20,
+    // borderBottomRightRadius: 20,
   },
   navigationWrapper: {
     flex: 1,

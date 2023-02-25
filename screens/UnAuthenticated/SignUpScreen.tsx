@@ -33,7 +33,7 @@ const SignUpScreen = ({ navigation }: SignUpProps) => {
     // setTimeout(() => {
     //   setloadingBtn(false);
     // }, 1000);
-    navigation.navigate('BusinessName');
+    navigation.navigate('PhoneVerification');
   };
 
   const handleSignInRedirect = () => {

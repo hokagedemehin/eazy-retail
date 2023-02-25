@@ -17,6 +17,7 @@ export type RootStackParamList = {
   // NotFound: undefined;
   Onboarding: undefined;
   SignUp: undefined;
+  PhoneVerification: undefined;
   SignIn: undefined;
   BusinessName: undefined;
   BusinessLocation: undefined;
