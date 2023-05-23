@@ -3,6 +3,7 @@
     "name": "easy-retail",
     "slug": "easy-retail",
     "version": "1.0.0",
+    "scheme": "easyretail",
     "orientation": "portrait",
     "icon": "./assets/easylogo3.png",
     "userInterfaceStyle": "light",
@@ -31,7 +32,8 @@
     "extra": {
       "eas": {
         "projectId": "1b05b21e-d2c1-4c55-b697-5ad285b91f45"
-      }
+      },
+      "backendUrl": "https://api.easyretail.app"
     },
     "plugins": ["expo-community-flipper", "expo-image-picker"]
   }

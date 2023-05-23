@@ -20,8 +20,6 @@ const BottomTab = createBottomTabNavigator();
 const HomeScreen = () => {
   const parentName = useAppSelector((state) => state.hideTabs.parentName);
 
-  // console.log('parentName', parentName);
-
   return (
     <BottomTab.Navigator
       initialRouteName='CounterPage'
@@ -42,7 +40,7 @@ const HomeScreen = () => {
           tabBarLabel: 'Counter',
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: 'Hubhead',
+            fontFamily: 'Givonic-Regular',
           },
           tabBarIcon: ({ focused }) => (
             <CounterSvgComponent
@@ -96,6 +94,12 @@ const HomeScreen = () => {
             />
           ),
           tabBarActiveTintColor: Colors['activeTab'],
+          tabBarStyle: {
+            height: 60,
+            paddingBottom: 7,
+            backgroundColor: Colors['white'],
+            display: parentName === 'hideScreen' ? 'none' : 'flex',
+          },
         }}
       />
       <BottomTab.Screen
@@ -113,6 +117,12 @@ const HomeScreen = () => {
             />
           ),
           tabBarActiveTintColor: Colors['activeTab'],
+          tabBarStyle: {
+            height: 60,
+            paddingBottom: 7,
+            backgroundColor: Colors['white'],
+            display: parentName === 'hideScreen' ? 'none' : 'flex',
+          },
         }}
       />
       <BottomTab.Screen
@@ -130,6 +140,12 @@ const HomeScreen = () => {
             />
           ),
           tabBarActiveTintColor: Colors['activeTab'],
+          tabBarStyle: {
+            height: 60,
+            paddingBottom: 7,
+            backgroundColor: Colors['white'],
+            display: parentName === 'hideScreen' ? 'none' : 'flex',
+          },
         }}
       />
     </BottomTab.Navigator>

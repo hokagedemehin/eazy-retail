@@ -21,6 +21,7 @@ const Colors = {
   chipBackground: '#CBE1DA',
   chipShort: '#EC1D1D',
   chipShortBackground: '#F7DADA',
+  editButton: '#183727',
 // ******************************************************
   
   transparent: 'transparent',

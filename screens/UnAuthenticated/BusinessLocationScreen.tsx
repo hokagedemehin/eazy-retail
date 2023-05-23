@@ -1,5 +1,6 @@
 import {
   FlatList,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -26,6 +27,9 @@ import {
 import axios from 'axios';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import { BackSvgComponent } from '@/assets/icons';
+import { useUpdateStore } from '@/hooks/storeHook';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { setStoreUser } from '@/store/slice/storeSlice';
 // import { FlashList } from '@shopify/flash-list';
 // import {
 //   BottomSheetModal,
@@ -66,9 +70,14 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
 
   // *************** BOTTOM SHEET ***************
   const actionSheetRef = useRef<ActionSheetRef>(null);
+  const currencyActionSheetRef = useRef<ActionSheetRef>(null);
 
   const handleShowCountryList = () => {
     actionSheetRef.current?.show();
+  };
+
+  const handleShowCurrencyList = () => {
+    currencyActionSheetRef.current?.show();
   };
 
   type Country = {
@@ -84,9 +93,37 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
   const [countries, setCountries] = useState([] as Country[]);
   const [searchCountries, setsearchCountries] = useState([] as Country[]);
   const [selectedCountry, setSelectedCountry] = useState('');
-  // const [currencies, setCurrencies] = useState([] as Currency[]);
+  const [currencies, setCurrencies] = useState([] as Currency[]);
+  const [selectedCurrency, setSelectedCurrency] = useState('');
 
-  // console.log('countries', countries);
+  const [loadingBtn, setLoadingBtn] = useState(false);
+  const { id } = useAppSelector((state) => state.storeUser);
+  const dispatch = useAppDispatch();
+  console.log('id', id);
+
+  const { updateStoreMutate, isLoading } = useUpdateStore();
+
+  const handleUpdateStore = async () => {
+    setLoadingBtn(true);
+    const data = {
+      id: id,
+      country: selectedCountry,
+      currency: selectedCurrency,
+    };
+    updateStoreMutate(data, {
+      onSuccess: (data) => {
+        dispatch(setStoreUser(data));
+        setLoadingBtn(false);
+        navigation.navigate('SelectIndustry');
+      },
+      onError: (error) => {
+        console.log(error);
+        setLoadingBtn(false);
+      },
+    });
+  };
+
+  // console.log('currencies', currencies);
 
   type restCountryProps = {
     name: {
@@ -126,6 +163,7 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
         // console.log('filteredData :>> ', filteredData);
 
         filteredData.forEach((country: restCountryProps) => {
+          // data.forEach((country: restCountryProps) => {
           const { common } = country.name;
           const { currencies } = country;
 
@@ -161,7 +199,7 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
 
         setCountries(countryArr);
         setsearchCountries(countryArr);
-        // setCurrencies(currencyArr);
+        setCurrencies(currencyArr);
 
         // console.log('data :>> ', data[2]);
       } catch (error) {
@@ -187,9 +225,9 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
     }
   };
 
-  const handleIndustryRedirect = () => {
-    navigation.navigate('SelectIndustry');
-  };
+  // const handleIndustryRedirect = () => {
+  //   navigation.navigate('SelectIndustry');
+  // };
 
   // **************** RENDER ITEM ****************
   const renderCountryItem = ({ item }: { item: Country }) => (
@@ -200,6 +238,22 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
         actionSheetRef.current?.hide();
         setSearch('');
         setCountries(searchCountries);
+      }}
+    >
+      <View style={styles.item}>
+        <Text numberOfLines={1} style={styles.itemText}>
+          {item.label}
+        </Text>
+      </View>
+    </TouchableRipple>
+  );
+
+  const renderCurrencyItem = ({ item }: { item: Currency }) => (
+    <TouchableRipple
+      rippleColor={Colors['white']}
+      onPress={() => {
+        setSelectedCurrency(item.value);
+        currencyActionSheetRef.current?.hide();
       }}
     >
       <View style={styles.item}>
@@ -226,12 +280,21 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
             >
               <TextInput
                 label='Country'
-                mode='outlined'
-                style={styles.input}
-                activeOutlineColor={Colors['black']}
+                underlineColor='transparent'
+                activeOutlineColor='transparent'
+                selectionColor={Colors['activeTab']}
                 contentStyle={styles.inputContent}
-                outlineStyle={styles.inputOutline}
+                style={styles.input}
                 editable={false}
+                theme={{
+                  colors: {
+                    primary: Colors['black'],
+                    text: Colors['black'],
+                    placeholder: Colors['white'],
+                    background: Colors['white'],
+                    surfaceVariant: Colors['white'],
+                  },
+                }}
                 // multiline={true}
                 value={selectedCountry}
                 right={
@@ -240,33 +303,62 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
                     // onPress={() => console.log('pressed')}
                     onPress={() => handleShowCountryList()}
                     style={styles.inputIcon}
+                    theme={{
+                      colors: {
+                        primary: Colors['black'],
+                        text: Colors['black'],
+                        // placeholder: Colors['white'],
+                        background: Colors['white'],
+                      },
+                    }}
                   />
                 }
               />
             </TouchableRipple>
+            <View style={styles.hideUnderline}></View>
           </View>
 
-          {/* <View style={styles.inputWrapper}>
-            <DropDownPicker
-              open={openCurrency}
-              value={currencyValue}
-              items={currencies}
-              setOpen={setOpenCurrency}
-              setValue={setCurrencyValue}
-              setItems={setCurrencies}
-              onOpen={() => hanldeSelectOpenClose('currency')}
-              listMode='SCROLLVIEW'
-              placeholder='Currency'
-              placeholderStyle={styles.dropdownPlaceholder}
-              style={styles.dropdown}
-              textStyle={styles.dropdownText}
-              // searchable={true}
-              // searchPlaceholder='Search country'
-              // mode='BADGE'
-              // showBadgeDot={true}
-              zIndex={3000}
-            />
-          </View> */}
+          <View style={styles.inputWrapper}>
+            <Pressable onPress={() => handleShowCurrencyList()}>
+              <TextInput
+                label='Currency'
+                underlineColor='transparent'
+                activeOutlineColor='transparent'
+                selectionColor={Colors['activeTab']}
+                contentStyle={styles.inputContent}
+                style={styles.input}
+                editable={false}
+                theme={{
+                  colors: {
+                    primary: Colors['black'],
+                    text: Colors['black'],
+                    placeholder: Colors['white'],
+                    background: Colors['white'],
+                    surfaceVariant: Colors['white'],
+                  },
+                }}
+                // multiline={true}
+                value={selectedCurrency}
+                right={
+                  <TextInput.Icon
+                    icon={'chevron-down'}
+                    // onPress={() => console.log('pressed')}
+                    onPress={() => handleShowCurrencyList()}
+                    style={styles.inputIcon}
+                    theme={{
+                      colors: {
+                        primary: Colors['black'],
+                        text: Colors['black'],
+                        // placeholder: Colors['white'],
+                        background: Colors['white'],
+                      },
+                    }}
+                  />
+                }
+              />
+            </Pressable>
+            <View style={styles.hideUnderline}></View>
+          </View>
         </View>
         <View style={styles.buttonWrapper}>
           <Button
@@ -277,10 +369,12 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
             accessibilityLabel='Sign Up'
             labelStyle={styles.buttonLabel}
             contentStyle={styles.buttonContent}
-            // loading={loadingBtn}
-            // disabled={loadingBtn}
-            onPress={() => handleIndustryRedirect()}
-            // onPress={() => console.log('Save to netxt screen')}
+            loading={loadingBtn || isLoading}
+            disabled={
+              loadingBtn || isLoading || !selectedCountry || !selectedCurrency
+            }
+            // onPress={() => handleIndustryRedirect()}
+            onPress={() => handleUpdateStore()}
           >
             Next
           </Button>
@@ -344,6 +438,23 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
             </View>
           </View>
         </ActionSheet>
+        <ActionSheet
+          ref={currencyActionSheetRef}
+          snapPoints={[70]}
+          containerStyle={styles.actionSheetContainer}
+          useBottomSafeAreaPadding={true}
+          gestureEnabled={true}
+        >
+          <View>
+            <View style={styles.listContainer}>
+              <FlatList
+                data={currencies}
+                renderItem={renderCurrencyItem}
+                keyExtractor={(item) => item.value}
+              />
+            </View>
+          </View>
+        </ActionSheet>
       </ScrollView>
     </SafeAreaView>
   );
@@ -368,11 +479,15 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     marginBottom: 20,
-    paddingTop: 5,
-    paddingBottom: 12,
-    // borderWidth: 1,
-    backgroundColor: Colors['white'],
-    borderRadius: 5,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 0.5,
+    borderColor: Colors['border'],
+  },
+  hideUnderline: {
+    marginTop: -4,
+    borderTopWidth: 8,
+    borderColor: Colors['white'],
   },
   input: {
     // paddingVertical: 11,

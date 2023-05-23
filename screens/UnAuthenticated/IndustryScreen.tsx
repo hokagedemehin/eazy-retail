@@ -22,6 +22,9 @@ import {
   SkinCareSvgComponent,
   TechSvgComponent,
 } from '@/assets/icons';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useUpdateStore } from '@/hooks/storeHook';
+import { setStoreUser } from '@/store/slice/storeSlice';
 
 const IndustryScreen = ({ navigation }: IndustryProps) => {
   // *************** PAGE HEADER ***************
@@ -89,12 +92,38 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
     },
   ]);
 
-  // console.log('industry', industry);
-
   // ********************** CARD SELECTION **********************
   const [selectedIndustry, setSelectedIndustry] = useState(0);
 
+  const [loadingBtn, setLoadingBtn] = useState(false);
+  const { id } = useAppSelector((state) => state.storeUser);
+  const dispatch = useAppDispatch();
+
+  const { updateStoreMutate, isLoading } = useUpdateStore();
+
+  const handleUpdateStore = async () => {
+    setLoadingBtn(true);
+    const data = {
+      id: id,
+      industry: industry[selectedIndustry - 1].name,
+    };
+    updateStoreMutate(data, {
+      onSuccess: (data) => {
+        dispatch(setStoreUser(data));
+        setLoadingBtn(false);
+        navigation.navigate('RegistrationSuccessfull');
+      },
+      onError: (error) => {
+        console.log(error);
+        setLoadingBtn(false);
+      },
+    });
+  };
+
+  // console.log('id', id);
+
   // console.log(selectedIndustry);
+  // console.log('industry', industry[selectedIndustry - 1]);
 
   // *************** BOTTOM SHEET ***************
   const actionSheetRef = useRef<ActionSheetRef>(null);
@@ -141,9 +170,9 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
   };
 
   // ********************** HANDLE SUBMIT **********************
-  const handleSuccessRedirect = () => {
-    navigation.navigate('RegistrationSuccessfull');
-  };
+  // const handleSuccessRedirect = () => {
+  //   navigation.navigate('RegistrationSuccessfull');
+  // };
 
   return (
     <ScrollView style={styles.container}>
@@ -230,10 +259,10 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
           accessibilityLabel='Sign Up'
           labelStyle={styles.buttonLabel}
           contentStyle={styles.buttonContent}
-          // loading={loadingBtn}
-          // disabled={loadingBtn}
-          onPress={() => handleSuccessRedirect()}
-          // onPress={() => console.log('Sign Up')}
+          loading={loadingBtn || isLoading}
+          disabled={loadingBtn || isLoading || selectedIndustry === 0}
+          // onPress={() => handleSuccessRedirect()}
+          onPress={() => handleUpdateStore()}
         >
           Next
         </Button>

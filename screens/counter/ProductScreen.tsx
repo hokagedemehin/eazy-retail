@@ -42,7 +42,6 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
       // <View style={styles.touchableWrapper}>
       //   <TouchableRipple
       //     onPress={() => {
-      //       // console.log('pressed');
       //       navigation.navigate('CounterProduct', {
       //         id: item.id,
       //       });
@@ -88,7 +87,6 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
       <View style={styles.filtersContainer}>
         <TouchableRipple
           onPress={() => {
-            // console.log('pressed');
             setActiveFilter('all');
           }}
           rippleColor={Colors['transparent']}
@@ -110,7 +108,6 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
         </TouchableRipple>
         <TouchableRipple
           onPress={() => {
-            // console.log('pressed');
             setActiveFilter('completed');
           }}
           rippleColor={Colors['transparent']}

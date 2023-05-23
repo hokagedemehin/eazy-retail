@@ -267,4 +267,5 @@ export const allCategory = [
     name: 'Meat',
     image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1676678881/meat_vymw2h.jpg',
   },
+ 
 ]

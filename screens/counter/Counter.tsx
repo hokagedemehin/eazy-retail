@@ -19,6 +19,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ProductScreen from './ProductScreen';
 import CustomersScreen from './CustomersScreen';
 import { CounterScreenNavigation } from '@/interfaces/navigation/counter';
+// import Constants from 'expo-constants';
+// import * as Linking from 'expo-linking';
 
 const SalesTab = createMaterialTopTabNavigator();
 
@@ -34,6 +36,10 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
       return 'Good Evening';
     }
   };
+
+  // console.log(Constants?.expoConfig?.extra);
+  // console.log(process.env);
+  // console.log(Linking.createURL('Counter'));
 
   return (
     <SafeAreaView style={styles.safeAreaStyle}>

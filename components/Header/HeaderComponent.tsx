@@ -10,7 +10,6 @@ const HeaderComponent = ({ title, handleBack }: handleBack) => {
       <View style={styles.leftContainer}>
         <Button
           title='Back'
-          // onPress={() => console.log('Back')}
           onPress={() => handleBack()}
           icon={<BackSvgComponent />}
           titleStyle={{
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
   rightContainer: {
     // borderWidth: 1,
     // width: '70%',
-    marginLeft: 25,
+    marginLeft: 35,
   },
   headerText: {
     fontFamily: 'Givonic-Bold',

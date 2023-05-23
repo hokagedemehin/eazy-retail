@@ -20,7 +20,7 @@ import {
   Chip,
   TextInput as RNPTextInput,
 } from 'react-native-paper';
-import { CounterConfirmSaleNavigation } from '@/interfaces/navigation/counter';
+// import { CounterConfirmSaleNavigation } from '@/interfaces/navigation/counter';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import { addSale } from '@/store/slice/newSaleSlice';
 import {
@@ -30,8 +30,11 @@ import {
 } from '@/assets/icons';
 import { setSaleSummary } from '@/store/slice/saleSummarySlice';
 import { RootState } from '@/store/store';
+import { CounterConfirmSaleProps } from '@/interfaces/navigation/counter';
 
-const ConfirmSaleComp = ({ navigation }: CounterConfirmSaleNavigation) => {
+const ConfirmSaleComp = ({
+  navigation,
+}: Omit<CounterConfirmSaleProps<'ConfirmSale', 'AddProduct'>, 'route'>) => {
   const dispatch = useAppDispatch();
   const { selectedSales } = useAppSelector((state) => state.newSale);
 
@@ -625,7 +628,7 @@ const ConfirmSaleComp = ({ navigation }: CounterConfirmSaleNavigation) => {
           <Button
             type='solid'
             title='Add new item'
-            // onPress={() => navigation.navigate('CounterAddItem')}
+            // onPress={() => navigation.navigate('AddProduct')}
             onPress={() => console.log('pressed')}
             buttonStyle={styles.addItemButton}
             titleStyle={styles.addItemButtonText}
@@ -903,6 +906,7 @@ const ConfirmSaleComp = ({ navigation }: CounterConfirmSaleNavigation) => {
       <ActionSheet
         ref={taxActionSheetRef}
         gestureEnabled={true}
+        containerStyle={styles.actionSheetContainer}
         // onClose={() => {
         //   setTaxPercentage('');
         // }}
@@ -935,7 +939,11 @@ const ConfirmSaleComp = ({ navigation }: CounterConfirmSaleNavigation) => {
           />
         </View>
       </ActionSheet>
-      <ActionSheet ref={discountActionSheetRef} gestureEnabled={true}>
+      <ActionSheet
+        ref={discountActionSheetRef}
+        gestureEnabled={true}
+        containerStyle={styles.actionSheetContainer}
+      >
         <Text style={styles.inputOtherLabel}>Add Discount</Text>
         <View style={styles.inputWrapper}>
           <TextInput
@@ -1333,7 +1341,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
     // flex: 1,
-    width: '100%',
+    // width: '100%',
     // height: '100%',
     backgroundColor: Colors['white'],
     // justifyContent: 'space-between',

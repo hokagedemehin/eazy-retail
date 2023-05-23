@@ -15,14 +15,14 @@ import {
   OnboardingProps,
   RootStackParamList,
 } from '@/interfaces/navigation/navigation';
-import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setOnBoarded } from '@/store/slice/tokenSlice';
 
 const OnboardingComp = ({ navigation }: OnboardingProps) => {
   // ***** SECURE STORAGE | REDUX ONBOARDING | REDIRECT *******
   const dispatch = useAppDispatch();
   const handleRedirect = async (name: keyof RootStackParamList) => {
-    await SecureStore.setItemAsync('onboarding', 'true');
+    await AsyncStorage.setItem('onboarding', 'true');
     dispatch(setOnBoarded(true));
     navigation.replace(name);
   };
@@ -128,7 +128,6 @@ const OnboardingComp = ({ navigation }: OnboardingProps) => {
             buttonStyle={styles.signupButton}
             titleStyle={styles.signupLabel}
             radius={7}
-            // onPress={() => console.log('Sign Up')}
             onPress={() => handleRedirect('SignUp')}
           />
         </View>
@@ -139,7 +138,6 @@ const OnboardingComp = ({ navigation }: OnboardingProps) => {
             buttonStyle={styles.signinButton}
             titleStyle={styles.signinLabel}
             radius={7}
-            // onPress={() => console.log('Sign In')}
             onPress={() => handleRedirect('SignIn')}
           />
         </View>

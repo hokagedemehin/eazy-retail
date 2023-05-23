@@ -20,7 +20,9 @@ import Colors from '@/constants/Colors';
 
 const AddProductTab = createMaterialTopTabNavigator();
 
-const AddProductScreen = ({ navigation }: Omit<AddProductProps, 'route'>) => {
+const AddProductScreen = ({
+  navigation,
+}: Omit<AddProductProps<'AddProduct'>, 'route'>) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const AddProductScreen = ({ navigation }: Omit<AddProductProps, 'route'>) => {
             }}
           >
             <AddProductTab.Screen
-              name='Simple'
+              name='AddSimpleProduct'
               component={AddSimpleProductScreen}
               options={{
                 tabBarIndicator: () => null,
@@ -80,7 +82,7 @@ const AddProductScreen = ({ navigation }: Omit<AddProductProps, 'route'>) => {
               }}
             />
             <AddProductTab.Screen
-              name='Advanced'
+              name='AddAdvancedProduct'
               component={AddAdvanceProductScreen}
               options={{
                 tabBarIndicator: () => null,

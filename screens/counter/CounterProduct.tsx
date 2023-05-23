@@ -19,7 +19,6 @@ const CounterProduct = ({ navigation }: CounterProductsNavigation) => {
     navigation.goBack();
   };
   // const getss = navigation.getParent();
-  // console.log(getss?.getState().routeNames[getss?.getState().index]);
 
   type ProductDetail = {
     id: string | number;
@@ -35,7 +34,6 @@ const CounterProduct = ({ navigation }: CounterProductsNavigation) => {
 
   const [productDetail, setProductDetail] = useState({} as ProductDetail);
 
-  // console.log('productDetail', productDetail);
   useEffect(() => {
     // filter allSales to get the product with the id passed in the route params
     // set the productDetail state to the filtered product

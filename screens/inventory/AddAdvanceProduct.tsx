@@ -1,13 +1,28 @@
-import { Pressable, StyleSheet, View, ScrollView } from 'react-native';
-import React, { useState } from 'react';
-import { TextInput } from 'react-native-paper';
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  FlatList,
+} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { TextInput, TouchableRipple } from 'react-native-paper';
 import Colors from '@/constants/Colors';
-import { Button, Image } from '@rneui/themed';
+import { Button, Icon, Image } from '@rneui/themed';
 import { useToast } from 'react-native-toast-notifications';
 import * as ImagePicker from 'expo-image-picker';
-import { CategoryImageUploadSvgComponent } from '@/assets/icons';
-
-const AddAdvanceProductScreen = () => {
+import {
+  CategoryImageUploadSvgComponent,
+  EmptyListSvgComponent,
+} from '@/assets/icons';
+import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
+import { AllProductListProps } from '@/interfaces/navigation/inventory';
+import { allCategory } from '@/data/dummy_data';
+// Omit<InventoryProps<'AddProduct'>, 'route'>
+const AddAdvanceProductScreen = ({
+  navigation,
+}: Omit<AllProductListProps<'AllProducts'>, 'route'>) => {
   const [productImage, setPategoryImage] = useState('');
 
   const toast = useToast();
@@ -64,13 +79,73 @@ const AddAdvanceProductScreen = () => {
 
   // ******************* SAVE PRODUCT *******************
   const handleSaveProduct = () => {
-    // console.log('Save category');
-    // navigation.navigate('InventoryHome');
     toast.show('Product added successfully', {
       type: 'success',
       duration: 2000,
+
       // successIcon: <CategoryImageUploadSvgComponent />,
     });
+    navigation.navigate('InventoryHome');
+  };
+
+  // ******************** CATEGORY ACTION SHEET ********************
+  const categoryActionSheetRef = useRef<ActionSheetRef>(null);
+
+  // ******************* CATEGORY LIST *******************
+  const [categoryList, setCategoryList] = useState<typeof allCategory>([]);
+  const [categoryValue, setCategoryValue] = useState('');
+
+  useEffect(() => {
+    const newData = [] as (typeof allCategory)[number][];
+    allCategory.forEach((category) => {
+      newData.push(category);
+    });
+    setCategoryList(newData);
+    return () => {
+      setCategoryList([]);
+    };
+  }, []);
+
+  // ****************** FLATLIST CATEGORY ******************
+  const renderCategoryList = ({ item }: { item: (typeof allCategory)[0] }) => {
+    return (
+      <TouchableRipple
+        rippleColor={Colors['white']}
+        onPress={() => {
+          // console.log('Category');
+          setCategoryValue(item.name);
+          categoryActionSheetRef.current?.hide();
+        }}
+        // style={styles.categoryItem}
+      >
+        <View style={styles.content}>
+          <View style={styles.imageNameWrapper}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={{
+                  uri: item.image,
+                }}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.nameWrapper}>
+              <Text numberOfLines={1} style={styles.name}>
+                {item.name}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.addIcon}>
+            <Icon
+              name='add'
+              type='ionicon'
+              size={20}
+              color={Colors['black']}
+              // reverse
+            />
+          </View>
+        </View>
+      </TouchableRipple>
+    );
   };
 
   return (
@@ -82,80 +157,152 @@ const AddAdvanceProductScreen = () => {
         <View style={styles.inputWrapper}>
           <TextInput
             label='Product name'
-            mode='outlined'
-            // autoCapitalize='none'
-            style={styles.input}
-            activeOutlineColor={Colors['black']}
+            underlineColor='transparent'
+            activeOutlineColor='transparent'
+            selectionColor={Colors['activeTab']}
             contentStyle={styles.inputContent}
-            outlineStyle={styles.inputOutline}
             theme={{
               colors: {
                 primary: Colors['black'],
                 text: Colors['black'],
                 placeholder: Colors['white'],
                 background: Colors['white'],
+                surfaceVariant: Colors['white'],
               },
             }}
           />
+          <View style={styles.hideUnderline}></View>
         </View>
         <View style={styles.inputWrapper}>
-          <Pressable onPress={() => console.log('category')}>
-            <TextInput
-              label='Category'
-              mode='outlined'
-              style={styles.input}
-              activeOutlineColor={Colors['black']}
-              contentStyle={styles.inputContent}
-              outlineStyle={styles.inputOutline}
-              editable={false}
-              right={
-                <TextInput.Icon
-                  icon={'chevron-down'}
-                  style={styles.inputIcon}
-                  size={30}
-                />
-              }
-            />
+          <Pressable
+            onPress={() => {
+              // console.log('Category');
+              categoryActionSheetRef.current?.show();
+            }}
+          >
+            <>
+              <TextInput
+                label='Category'
+                underlineColor='transparent'
+                activeOutlineColor='transparent'
+                selectionColor={Colors['activeTab']}
+                contentStyle={styles.inputContent}
+                right={
+                  <TextInput.Icon
+                    icon={'chevron-down'}
+                    style={styles.inputIcon}
+                    size={30}
+                    onPress={() => {
+                      // console.log('Category');
+                      categoryActionSheetRef.current?.show();
+                    }}
+                    theme={{
+                      colors: {
+                        primary: Colors['black'],
+                        text: Colors['black'],
+                        // placeholder: Colors['white'],
+                        background: Colors['white'],
+                      },
+                    }}
+                  />
+                }
+                value={categoryValue}
+                editable={false}
+                theme={{
+                  colors: {
+                    primary: Colors['black'],
+                    text: Colors['black'],
+                    placeholder: Colors['white'],
+                    background: Colors['white'],
+                    surfaceVariant: Colors['white'],
+                  },
+                }}
+              />
+              <View style={styles.hideUnderline}></View>
+            </>
           </Pressable>
         </View>
-        <View style={styles.inputWrapper}>
+        {/* <View style={styles.inputWrapper}>
           <Pressable onPress={() => console.log('Sell by')}>
-            <TextInput
-              label='Sell by'
-              mode='outlined'
-              style={styles.input}
-              activeOutlineColor={Colors['black']}
-              contentStyle={styles.inputContent}
-              outlineStyle={styles.inputOutline}
-              editable={false}
-              right={
-                <TextInput.Icon
-                  icon={'chevron-down'}
-                  style={styles.inputIcon}
-                  size={30}
-                />
-              }
-            />
+            <>
+              <TextInput
+                label='Sell by'
+                underlineColor='transparent'
+                activeOutlineColor='transparent'
+                selectionColor={Colors['activeTab']}
+                contentStyle={styles.inputContent}
+                right={
+                  <TextInput.Icon
+                    icon={'chevron-down'}
+                    style={styles.inputIcon}
+                    size={30}
+                    theme={{
+                      colors: {
+                        primary: Colors['black'],
+                        text: Colors['black'],
+                        // placeholder: Colors['white'],
+                        background: Colors['white'],
+                      },
+                    }}
+                  />
+                }
+                editable={false}
+                theme={{
+                  colors: {
+                    primary: Colors['black'],
+                    text: Colors['black'],
+                    placeholder: Colors['white'],
+                    background: Colors['white'],
+                    surfaceVariant: Colors['white'],
+                  },
+                }}
+              />
+              <View style={styles.hideUnderline}></View>
+            </>
           </Pressable>
-        </View>
+        </View> */}
         <View style={styles.inputWrapper}>
-          <Pressable onPress={() => console.log('Variants')}>
-            <TextInput
-              label='Variants'
-              mode='outlined'
-              style={styles.input}
-              activeOutlineColor={Colors['black']}
-              contentStyle={styles.inputContent}
-              outlineStyle={styles.inputOutline}
-              editable={false}
-              right={
-                <TextInput.Icon
-                  icon={'chevron-right'}
-                  style={styles.inputIcon}
-                  size={30}
-                />
-              }
-            />
+          <Pressable
+            // onPress={() => console.log('Variants')}
+            onPress={() => navigation.navigate('AddVariant')}
+          >
+            <>
+              <TextInput
+                label='Variants'
+                underlineColor='transparent'
+                activeOutlineColor='transparent'
+                selectionColor={Colors['activeTab']}
+                contentStyle={styles.inputContent}
+                // value='5 Variants'
+                right={
+                  <TextInput.Icon
+                    icon={'chevron-right'}
+                    style={styles.inputIcon}
+                    size={30}
+                    onPress={() => navigation.navigate('AddVariant')}
+                    theme={{
+                      colors: {
+                        primary: Colors['black'],
+                        text: Colors['black'],
+                        // placeholder: Colors['white'],
+                        background: Colors['white'],
+                      },
+                    }}
+                  />
+                }
+                editable={false}
+                theme={{
+                  colors: {
+                    primary: Colors['black'],
+                    text: Colors['black'],
+                    placeholder: Colors['white'],
+                    background: Colors['white'],
+                    surfaceVariant: Colors['white'],
+                  },
+                }}
+              />
+              <View style={styles.hideUnderline}></View>
+            </>
           </Pressable>
         </View>
         <View style={styles.imageUploadWrapper}>
@@ -223,6 +370,49 @@ const AddAdvanceProductScreen = () => {
           size='lg'
         />
       </View>
+      <ActionSheet
+        ref={categoryActionSheetRef}
+        gestureEnabled={true}
+        snapPoints={categoryList.length === 0 ? [100] : [50]}
+        containerStyle={styles.actionSheetContainer}
+      >
+        <View>
+          {/* empty category list in action sheet */}
+          {categoryList.length === 0 && (
+            <View style={styles.emptyContainer}>
+              <View>
+                <EmptyListSvgComponent />
+              </View>
+              <Text style={styles.message}>No category is available</Text>
+
+              <Button
+                title='Add new category'
+                onPress={() => {
+                  categoryActionSheetRef.current?.hide();
+                  navigation.navigate('AddCategory');
+                }}
+                buttonStyle={styles.addCategoryBtnStyle}
+                containerStyle={styles.addCategoryContainerStyle}
+                titleStyle={styles.addCategoryBtnTitleStyle}
+                size='lg'
+              />
+            </View>
+          )}
+          {categoryList.length > 0 && (
+            <FlatList
+              data={categoryList}
+              renderItem={renderCategoryList}
+              keyExtractor={(item) => item.id}
+              numColumns={1}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 10,
+                paddingHorizontal: 5,
+              }}
+            />
+          )}
+        </View>
+      </ActionSheet>
     </ScrollView>
   );
 };
@@ -242,25 +432,37 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   inputWrapper: {
+    // marginBottom: 10,
+    // paddingTop: 5,
+    // paddingBottom: 12,
+    // // borderWidth: 1,
+    // backgroundColor: Colors['white'],
+    // borderRadius: 5,
+
     marginBottom: 10,
-    paddingTop: 5,
-    paddingBottom: 12,
-    // borderWidth: 1,
-    backgroundColor: Colors['white'],
-    borderRadius: 5,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 0.5,
+    borderColor: Colors['border'],
   },
   input: {
     fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   inputOutline: {
     borderColor: Colors['white'],
   },
+  hideUnderline: {
+    marginTop: -4,
+    borderTopWidth: 8,
+    borderColor: Colors['white'],
+  },
   inputIcon: {
-    marginTop: 10,
+    // marginTop: 10,
+    // backgroundColor: Colors['white'],
   },
   imageUploadWrapper: {
     // borderWidth: 1,
@@ -305,5 +507,91 @@ const styles = StyleSheet.create({
     // marginHorizontal: 15,
     marginBottom: 10,
     marginTop: 20,
+  },
+  actionSheetContainer: {
+    backgroundColor: Colors['white'],
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+
+  // ** EMPTY CATEGORY LIST IN ACTION SHEET **
+  emptyContainer: {
+    // flex: 1,
+    // backgroundColor: Colors['background'],
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  message: {
+    fontSize: 18,
+    color: 'black',
+    fontFamily: 'Givonic-Bold',
+    textAlign: 'center',
+    marginVertical: 15,
+  },
+
+  // ** ADD CATEGORY BUTTON IN ACTION SHEET **
+  addCategoryBtnStyle: {
+    backgroundColor: Colors['black'],
+    borderRadius: 5,
+    // width: '100%',
+  },
+  addCategoryContainerStyle: {
+    // borderWidth: 1,
+    // borderRadius: 10,
+    width: '100%',
+    marginTop: 20,
+    // marginBottom: 20,
+  },
+  addCategoryBtnTitleStyle: {
+    fontFamily: 'Givonic-SemiBold',
+    color: Colors['white'],
+  },
+
+  // ** CATEGORY LIST IN ACTION SHEET **
+
+  content: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginHorizontal: 10,
+  },
+  imageNameWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    // width: 170,
+    // height: 170,
+    // overflow: 'hidden',
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    // resizeMode: 'contain',
+  },
+  nameWrapper: {
+    paddingVertical: 10,
+    // paddingHorizontal: 15,
+    backgroundColor: Colors['white'],
+    // borderBottomLeftRadius: 10,
+    // borderBottomRightRadius: 10,
+    // borderWidth: 1,
+    // height: 70,
+    // width: '100%',
+    // justifyContent: 'center',
+  },
+  name: {
+    fontSize: 14,
+    fontFamily: 'Givonic-SemiBold',
+    color: Colors['black'],
+    paddingLeft: 10,
+    // borderWidth: 1,
+  },
+  addIcon: {
+    // paddingHorizontal: 10,
   },
 });

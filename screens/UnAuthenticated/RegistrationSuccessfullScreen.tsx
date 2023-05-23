@@ -9,7 +9,6 @@ const RegistrationSuccessfullScreen = ({
   navigation,
 }: RegistrationSuccessfullProps) => {
   const handleHomePageRedirect = () => {
-    // console.log('Redirect to Home Page');
     navigation.replace('Home');
   };
   return (
@@ -39,7 +38,6 @@ const RegistrationSuccessfullScreen = ({
           // loading={loadingBtn}
           // disabled={loadingBtn}
           onPress={() => handleHomePageRedirect()}
-          // onPress={() => console.log('Sign Up')}
         >
           Great
         </Button>

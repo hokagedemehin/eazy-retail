@@ -40,7 +40,6 @@ const AllCategoryListScreen = ({
       return (
         <View style={styles.addCategorycontent}>
           <TouchableRipple
-            // onPress={() => console.log('Pressed')}
             onPress={() => navigation.navigate('AddCategory')}
             rippleColor={Colors['white']}
             style={styles.addCard}

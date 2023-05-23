@@ -8,6 +8,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import AllProductList from './AllProductList';
 import LowStockList from './LowStockList';
 import ExpiringList from './ExpiredList';
+import { InventoryProps } from '@/interfaces/navigation/inventory';
 // import { InventoryHomeNavigation } from '@/interfaces/navigation/inventory';
 
 type IProductTypes = Array<{
@@ -20,8 +21,10 @@ type IProductTypes = Array<{
 }>;
 
 const ProductsTab = createMaterialTopTabNavigator();
-
-const AllProductListScreen = () => {
+// Omit<AddProductOrCategoryProps<'AddCategory'>, 'route'>
+const AllProductListScreen = ({
+  navigation,
+}: Omit<InventoryProps<'AddProduct'>, 'route'>) => {
   const [productsCheck, setProductsCheck] = useState<IProductTypes>([]);
 
   useEffect(() => {
@@ -33,7 +36,6 @@ const AllProductListScreen = () => {
     return () => {
       setProductsCheck([]);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -45,12 +47,12 @@ const AllProductListScreen = () => {
             <Button
               type='solid'
               title={`Add Item`}
-              onPress={() => console.log('pressed')}
-              // onPress={() => navigation.navigate('AddProduct')}
+              onPress={() => navigation.navigate('AddProduct')}
               radius={10}
               buttonStyle={{
                 backgroundColor: Colors['black'],
                 marginHorizontal: 20,
+                marginBottom: 20,
               }}
               size='lg'
             />
@@ -127,6 +129,7 @@ const styles = StyleSheet.create({
   emptyPageWrapper: {
     flex: 1,
     paddingTop: 20,
+    justifyContent: 'space-between',
     // justifyContent: 'center',
     // alignItems: 'center',
   },
