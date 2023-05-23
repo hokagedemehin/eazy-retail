@@ -1,9 +1,14 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { BusinessNameProps } from '../../interfaces/navigation/navigation';
 import Colors from '../../constants/Colors';
 import { Button, IconButton, TextInput } from 'react-native-paper';
 import { BackSvgComponent } from '@/assets/icons';
+import { useCreateStore } from '@/hooks/storeHook';
+// import { useAppSelector } from '@/hooks/redux';
+import { useGetUser } from '@/hooks/auth';
+import { useAppDispatch } from '@/hooks/redux';
+import { setStoreUser } from '@/store/slice/storeSlice';
 
 const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
   // ************* HEADER *************
@@ -39,8 +44,41 @@ const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
     });
   }, [navigation]);
 
-  const handleIndustryRedirect = () => {
-    navigation.navigate('BusinessLocation');
+  // const handleIndustryRedirect = () => {
+  //   navigation.navigate('BusinessLocation');
+  // };
+
+  const [loadingBtn, setLoadingBtn] = useState(false);
+  const [formValue, setFormValue] = useState('');
+  const dispatch = useAppDispatch();
+
+  // const { user } = useAppSelector((state) => state.user);
+
+  // console.log(user);
+
+  const { createStoreMutate, isLoading } = useCreateStore();
+  const { userData } = useGetUser();
+
+  const handleCreateStore = async () => {
+    setLoadingBtn(true);
+    const form = {
+      business_name: formValue,
+      country: '',
+      currency: '',
+      industry: '',
+      user: userData.pk,
+    };
+    createStoreMutate(form, {
+      onSuccess: async (data) => {
+        dispatch(setStoreUser(data));
+        navigation.navigate('BusinessLocation');
+        setLoadingBtn(false);
+      },
+      onError: (error) => {
+        console.log(error);
+        setLoadingBtn(false);
+      },
+    });
   };
 
   return (
@@ -54,6 +92,8 @@ const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
           <TextInput
             mode='flat'
             style={styles.input}
+            value={formValue}
+            onChangeText={(text) => setFormValue(text)}
             selectionColor={Colors['inputText']}
             underlineColor={Colors['inputText']}
             activeUnderlineColor={Colors['inputText']}
@@ -70,10 +110,10 @@ const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
           accessibilityLabel='Sign Up'
           labelStyle={styles.buttonLabel}
           contentStyle={styles.buttonContent}
-          // loading={loadingBtn}
-          // disabled={loadingBtn}
-          onPress={() => handleIndustryRedirect()}
-          // onPress={() => console.log('Save to netxt screen')}
+          loading={loadingBtn || isLoading}
+          disabled={loadingBtn || isLoading || !formValue}
+          // onPress={() => handleIndustryRedirect()}
+          onPress={() => handleCreateStore()}
         >
           Next
         </Button>

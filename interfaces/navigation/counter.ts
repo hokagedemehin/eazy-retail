@@ -1,6 +1,9 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { CompositeScreenProps, RouteProp } from '@react-navigation/native';
 import type { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { RootInventoryStackParamList } from './inventory';
+
+
 
 export type RootCounterStackParamList = {
   Counter: undefined;
@@ -24,7 +27,12 @@ export type CounterProductsProps = NativeStackScreenProps<RootCounterStackParamL
 
 export type CounterNewSaleProps = NativeStackScreenProps<RootCounterStackParamList, 'NewSale'>;
 
-export type CounterConfirmSaleProps = NativeStackScreenProps<RootCounterStackParamList, 'ConfirmSale'>;
+// export type CounterConfirmSaleProps = NativeStackScreenProps<RootCounterStackParamList, 'ConfirmSale'>;
+
+export type CounterConfirmSaleProps<T extends keyof RootCounterStackParamList, K extends keyof RootInventoryStackParamList> = CompositeScreenProps<
+  NativeStackScreenProps<RootCounterStackParamList, T>,
+  NativeStackScreenProps<RootInventoryStackParamList, K>
+>
 
 export type CounterScreenProps = NativeStackScreenProps<RootCounterStackParamList, 'Counter'>;
 
@@ -47,9 +55,9 @@ export type ProductScreenProps =
     navigation: CounterNewSaleProps['navigation'],
   }
 
-  export type CounterConfirmSaleNavigation = {
-    navigation: CounterConfirmSaleProps['navigation'],
-  }
+  // export type CounterConfirmSaleNavigation = {
+  //   navigation: CounterConfirmSaleProps['navigation'],
+  // }
 
   export type CounterScreenNavigation = {
     navigation: CounterScreenProps['navigation'],

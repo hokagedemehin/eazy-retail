@@ -105,21 +105,21 @@ const AddCategoryScreen = ({
           <View style={styles.inputWrapper}>
             <TextInput
               label='Category name'
-              mode='outlined'
-              // autoCapitalize='none'
-              style={styles.input}
-              activeOutlineColor={Colors['black']}
+              underlineColor='transparent'
+              activeOutlineColor='transparent'
+              selectionColor={Colors['activeTab']}
               contentStyle={styles.inputContent}
-              outlineStyle={styles.inputOutline}
               theme={{
                 colors: {
                   primary: Colors['black'],
                   text: Colors['black'],
                   placeholder: Colors['white'],
                   background: Colors['white'],
+                  surfaceVariant: Colors['white'],
                 },
               }}
             />
+            <View style={styles.hideUnderline}></View>
           </View>
           <View style={styles.imageUploadWrapper}>
             {categoryImage === '' && (
@@ -214,22 +214,37 @@ const styles = StyleSheet.create({
   },
 
   inputWrapper: {
-    marginBottom: 20,
-    paddingTop: 5,
-    paddingBottom: 12,
-    // borderWidth: 1,
-    backgroundColor: Colors['white'],
-    borderRadius: 5,
+    // marginBottom: 10,
+    // paddingTop: 5,
+    // paddingBottom: 12,
+    // // borderWidth: 1,
+    // backgroundColor: Colors['white'],
+    // borderRadius: 5,
+
+    marginBottom: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 0.5,
+    borderColor: Colors['border'],
   },
   input: {
     fontFamily: 'Givonic-SemiBold',
     // borderWidth: 1,
   },
   inputContent: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   inputOutline: {
     borderColor: Colors['white'],
+  },
+  hideUnderline: {
+    marginTop: -4,
+    borderTopWidth: 8,
+    borderColor: Colors['white'],
+  },
+  inputIcon: {
+    // marginTop: 10,
+    // backgroundColor: Colors['white'],
   },
   imageUploadWrapper: {
     // borderWidth: 1,

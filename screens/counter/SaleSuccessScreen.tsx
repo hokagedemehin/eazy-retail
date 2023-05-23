@@ -915,11 +915,10 @@ const SaleSuccessScreen = ({
     try {
       setLoadingBtn(true);
       const { uri } = await Print.printToFileAsync({ html: htmlReceipt });
-      // console.log('File has been saved to:', uri);
       await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
       setLoadingBtn(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setLoadingBtn(false);
     }
   };
@@ -951,7 +950,6 @@ const SaleSuccessScreen = ({
           // loading={loadingBtn}
           // disabled={loadingBtn}
           onPress={() => handleCounterPageRedirect()}
-          // onPress={() => console.log('Sign Up')}
         >
           Great
         </Button>
@@ -968,7 +966,6 @@ const SaleSuccessScreen = ({
           loading={loadingBtn}
           disabled={loadingBtn}
           onPress={() => printToFile()}
-          // onPress={() => console.log('Share Invoice')}
         >
           Share Invoice
         </Button>

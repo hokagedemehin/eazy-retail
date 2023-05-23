@@ -1,11 +1,14 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { CompositeScreenProps } from '@react-navigation/native';
 import type { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+// import InventoryHome from '../../screens/inventory/InventoryHome';
 
 export type RootInventoryStackParamList = {
   InventoryHome: undefined;
   AddProduct: undefined;
   AddCategory: undefined;
+  AddVariant: undefined;
+  AddBarcodeScanner: undefined;
 };
 
 export type RootInventoryHomeTabParamList = {
@@ -19,14 +22,19 @@ export type RootAllProductListTabParamList = {
   ExpiredProducts: undefined;
 };
 
-export type InventoryHomeProps = NativeStackScreenProps<RootInventoryStackParamList, 'InventoryHome'>;
+export type InventoryHomeProps<T extends keyof RootInventoryStackParamList> = NativeStackScreenProps<RootInventoryStackParamList, T>;
 
-export type AddProductProps = NativeStackScreenProps<RootInventoryStackParamList, 'AddProduct'>;
+export type AddProductProps<T extends keyof RootInventoryStackParamList> = NativeStackScreenProps<RootInventoryStackParamList, T>;
 
 export type AddProductOrCategoryProps<T extends keyof RootInventoryStackParamList> = NativeStackScreenProps<RootInventoryStackParamList, T>;
 
 export type AllProductListProps<T extends keyof RootAllProductListTabParamList> = CompositeScreenProps<
   MaterialTopTabScreenProps<RootAllProductListTabParamList, T>,
+  NativeStackScreenProps<RootInventoryStackParamList>
+>;
+
+export type InventoryProps<T extends keyof RootInventoryStackParamList> = CompositeScreenProps<
+  MaterialTopTabScreenProps<RootInventoryStackParamList, T>,
   NativeStackScreenProps<RootInventoryStackParamList>
 >;
 
@@ -43,6 +51,6 @@ export type AllCategoryListProps = CompositeScreenProps<
 //   NativeStackScreenProps<RootInventoryStackParamList>
 // >;
 
-export type InventoryHomeNavigation = {
-  navigation: InventoryHomeProps['navigation'];
-}
+// export type InventoryHomeNavigation = {
+//   navigation: InventoryHomeProps['navigation'];
+// }

@@ -11,7 +11,8 @@ import {
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 // import { useAppDispatch } from '../hooks/redux';
 import { setOnBoarded, setToken } from '../store/slice/tokenSlice';
-import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // import { createStackNavigator } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './UnAuthenticated/SignUpScreen';
@@ -26,22 +27,24 @@ import RegistrationSuccessfullScreen from './UnAuthenticated/RegistrationSuccess
 import HomeScreen from './HomeScreen';
 import BusinessNameScreen from './UnAuthenticated/BusinessNameScreen';
 import PhoneVerificationScreen from './UnAuthenticated/PhoneVerification';
+
 // import { useNavigation } from '@react-navigation/native';
 
 const AllScreens = () => {
   const [loadingPage, setLoadingPage] = useState(true);
+  // const [tokenValue, setTokenValue] = useState('');
   // const [onboarded, setOnboarded] = useState(false);
   // const [tokenExist, setTokenExist] = useState(false);
   // const [initialPageName, setInitialPageName] = useState('Onboarding');
   const dispatch = useAppDispatch();
   // const navigation = useNavigation();
   // const token = useAppSelector((state) => state.token.token);
-  const onBoarded = useAppSelector((state) => state.token.onBoarded);
+  const { onBoarded } = useAppSelector((state) => state.token);
   // console.log('token', token);
 
   // *************** TOKEN SECURE STORAGE ***************
   const getToken = async () => {
-    const result = await SecureStore.getItemAsync('token');
+    const result = await AsyncStorage.getItem('token');
     return result;
   };
 
@@ -60,8 +63,8 @@ const AllScreens = () => {
 
   // *************** ONBOARDING SECURE STORAGE ***************
   const getOnboarding = async () => {
-    await SecureStore.deleteItemAsync('onboarding');
-    const result = await SecureStore.getItemAsync('onboarding');
+    // await AsyncStorage.deleteItemAsync('onboarding');
+    const result = await AsyncStorage.getItem('onboarding');
     return result;
   };
 
@@ -74,13 +77,14 @@ const AllScreens = () => {
       const token = await getToken();
       // console.log('token :>> ', token);
 
-      if (onboarding) {
+      if (onboarding == null) {
         dispatch(setOnBoarded(true));
         // setInitialPageName('SignIn');
       }
 
       if (token) {
         dispatch(setToken(token));
+
         // setTokenExist(true);
       }
       setLoadingPage(false);
@@ -106,7 +110,13 @@ const AllScreens = () => {
                 headerShown: false,
               }}
             />
-            <Stack.Screen name='SignIn' component={SignInScreen} />
+            <Stack.Screen
+              name='SignIn'
+              component={SignInScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
             <Stack.Screen name='SignUp' component={SignUpScreen} />
             <Stack.Screen
               name='PhoneVerification'
@@ -140,6 +150,7 @@ const AllScreens = () => {
           <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} /> */}
           </Stack.Navigator>
         )}
+
         {/* {!loadingPage && onBoarded && !tokenExist && (
           <Stack.Navigator initialRouteName='SignIn'>
             <Stack.Screen name='SignIn' component={SignInScreen} />

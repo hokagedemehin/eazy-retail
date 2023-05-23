@@ -55,7 +55,6 @@ const AllProductList = ({
       return (
         <View style={styles.addProductcontent}>
           <TouchableRipple
-            // onPress={() => console.log('Pressed')}
             onPress={() => navigation.navigate('AddProduct')}
             rippleColor={Colors['white']}
             style={styles.addCard}

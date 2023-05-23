@@ -23,7 +23,6 @@ const initialState: NewSaleState = {
   selectedSales: [],
 }
 
-// console.log('initialState :>> ', initialState.selectedSales);
 
 export const newSaleSlice = createSlice({
   name: 'newSale',
@@ -43,7 +42,6 @@ export const newSaleSlice = createSlice({
     changeQuantity: number,
     total: number,
     }>>) => {
-      // console.log('action.payload :>> ', action.payload)
       state.selectedSales = action.payload
     }
   },

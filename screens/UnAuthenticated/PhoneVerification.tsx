@@ -40,7 +40,6 @@ const PhoneVerificationScreen = ({
   };
 
   const handleSendNewOTP = () => {
-    // console.log('send new OTP');
     actionSheetRef.current?.hide();
     toast.show('New OTP sent', {
       type: 'success',
@@ -90,7 +89,6 @@ const PhoneVerificationScreen = ({
             <Button
               title='Verify phone number'
               // onPress={pickImage}
-              // onPress={() => console.log('verify number')}
               onPress={() => handleSubmit()}
               buttonStyle={styles.VerifyBtnStyle}
               // containerStyle={styles.changeImageContainerStyle}

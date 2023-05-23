@@ -3,6 +3,9 @@ import tokenReducer from './slice/tokenSlice'
 import hideTabsReducer from './slice/hideTabsSlice'
 import newSaleReducer from './slice/newSaleSlice'
 import saleSummaryReducer from './slice/saleSummarySlice'
+import { barcodeSlice } from './slice/barcodeSlice'
+import { userSlice } from './slice/userSlice'
+import { storeUserSlice } from './slice/storeSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +13,9 @@ export const store = configureStore({
     hideTabs: hideTabsReducer,
     newSale: newSaleReducer,
     saleSummary: saleSummaryReducer,
+    [barcodeSlice.name]: barcodeSlice.reducer,
+    [userSlice.name]: userSlice.reducer,
+    [storeUserSlice.name]: storeUserSlice.reducer,
   },
 })
 
