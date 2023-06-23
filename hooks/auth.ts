@@ -65,7 +65,7 @@ export const useSignIn = () => {
   // return { mutate, isLoading };
 
   const {mutate, isLoading} = useMutation({
-    mutationFn: (data: postSignInData) => postSignInFetcher(`${BACKEND_URL}/dj-rest-auth/login/`, data),
+    mutationFn: (data: postSignInData) => postSignInFetcher(`${BACKEND_URL}/login`, data),
     // onSuccess: async(data) => {
     //   console.log(data)
     //   // await AsyncStorage.setItem('easy-token', data.key);
@@ -80,7 +80,7 @@ export const useSignIn = () => {
 export const useSignUp = () => {
 
   const {mutate, isLoading} = useMutation({
-    mutationFn: (data: postSignUpData) => postSignUpFetcher(`${BACKEND_URL}/dj-rest-auth/registration/`, data),
+    mutationFn: (data: postSignUpData) => postSignUpFetcher(`${BACKEND_URL}/signup`, data),
   })
   return  {
     mutate,
