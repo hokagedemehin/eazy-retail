@@ -27,6 +27,7 @@ import RegistrationSuccessfullScreen from './UnAuthenticated/RegistrationSuccess
 import HomeScreen from './HomeScreen';
 import BusinessNameScreen from './UnAuthenticated/BusinessNameScreen';
 import PhoneVerificationScreen from './UnAuthenticated/PhoneVerification';
+import Subscriptions from './subscriptions/Subscriptions';
 
 // import { useNavigation } from '@react-navigation/native';
 
@@ -145,7 +146,6 @@ const AllScreens = () => {
                 headerShown: false,
               }}
             />
-
             {/* <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
           <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} /> */}
           </Stack.Navigator>
