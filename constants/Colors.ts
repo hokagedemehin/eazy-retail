@@ -5,10 +5,11 @@ const Colors = {
   darkGreen: '#183727',
   green: '#336353',
   purple: '#9E8CE0',
+  purpleBackground: '#F0EEF9',
   // white: '#FFFFFF',
   grey: '#A0A4A8',
   darkGrey: '#414549',
-  // black: '#1F1F1F',
+  cardBlack: '#1F1F1F',
   background: '#EFEBE8',
   border:  '#CBE1DA',
   activeTab: '#336353',
@@ -22,6 +23,10 @@ const Colors = {
   chipShort: '#EC1D1D',
   chipShortBackground: '#F7DADA',
   editButton: '#183727',
+  salesCardProfit: '#1ED066',
+  salesCardLoss: '#D01E1E',
+  salesCardTitle: '#A0A4A8',
+
 // ******************************************************
   
   transparent: 'transparent',

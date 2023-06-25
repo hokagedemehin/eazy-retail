@@ -27,7 +27,7 @@ import RegistrationSuccessfullScreen from './UnAuthenticated/RegistrationSuccess
 import HomeScreen from './HomeScreen';
 import BusinessNameScreen from './UnAuthenticated/BusinessNameScreen';
 import PhoneVerificationScreen from './UnAuthenticated/PhoneVerification';
-import Subscriptions from './subscriptions/Subscriptions';
+// import Subscriptions from './subscriptions/Subscriptions';
 
 // import { useNavigation } from '@react-navigation/native';
 

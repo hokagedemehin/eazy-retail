@@ -1,17 +1,17 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SignInProps } from '../../interfaces/navigation/navigation';
 import Colors from '../../constants/Colors';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useGetUser, useSignIn } from '@/hooks/auth';
+// import { useGetUser, useSignIn } from '@/hooks/auth';
 // import axios from 'axios';
 // import BaseUrl from '@/utils/BaseUrl';
-import { setUser } from '@/store/slice/userSlice';
-import { useAppDispatch } from '@/hooks/redux';
+// import { setUser } from '@/store/slice/userSlice';
+// import { useAppDispatch } from '@/hooks/redux';
 import LoadingComp from '@/components/Loading/LoadingComp';
 import { useToast } from 'react-native-toast-notifications';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({ navigation }: SignInProps) => {
   // useLayoutEffect(() => {
@@ -32,40 +32,40 @@ const SignInScreen = ({ navigation }: SignInProps) => {
   // }, [navigation]);
 
   // ****** CHECK FOR USER | REDIRECT TO HOME PAGE ********
-  const dispatch = useAppDispatch();
-  const [loadingPage, setLoadingPage] = useState(true);
+  // const dispatch = useAppDispatch();
+  const [loadingPage, setLoadingPage] = useState(false);
   const toast = useToast();
 
-  const { userData } = useGetUser();
+  // const { userData } = useGetUser();
 
-  useEffect(() => {
-    // const BACKEND_URL = BaseUrl();
+  // useEffect(() => {
+  //   // const BACKEND_URL = BaseUrl();
 
-    // const checkUser = async () => {
-    //   // try {
-    //   //   const result = await AsyncStorage.getItemAsync('token');
-    //   //   const data = await axios.get(`${BACKEND_URL}/dj-rest-auth/user/`, {
-    //   //     headers: {
-    //   //       Authorization: `Bearer ${result}`,
-    //   //     },
-    //   //   });
-    //   //   if (data.data) {
-    //   //     dispatch(setUser(data.data));
-    //   //     navigation.replace('Home');
-    //   //   }
-    //   // } catch (error) {
-    //   //   // console.error(error);
-    //   // }
+  //   // const checkUser = async () => {
+  //   //   // try {
+  //   //   //   const result = await AsyncStorage.getItemAsync('token');
+  //   //   //   const data = await axios.get(`${BACKEND_URL}/dj-rest-auth/user/`, {
+  //   //   //     headers: {
+  //   //   //       Authorization: `Bearer ${result}`,
+  //   //   //     },
+  //   //   //   });
+  //   //   //   if (data.data) {
+  //   //   //     dispatch(setUser(data.data));
+  //   //   //     navigation.replace('Home');
+  //   //   //   }
+  //   //   // } catch (error) {
+  //   //   //   // console.error(error);
+  //   //   // }
 
-    // };
-    // checkUser();
+  //   // };
+  //   // checkUser();
 
-    if (userData) {
-      dispatch(setUser(userData));
-      navigation.replace('Home');
-    }
-    setLoadingPage(false);
-  }, [dispatch, navigation, userData]);
+  //   if (userData) {
+  //     dispatch(setUser(userData));
+  //     navigation.replace('Home');
+  //   }
+  //   setLoadingPage(false);
+  // }, [dispatch, navigation, userData]);
 
   const [showPassword, setShowPassword] = useState(false);
   // const [loadingBtn, setloadingBtn] = useState(false);
@@ -90,28 +90,29 @@ const SignInScreen = ({ navigation }: SignInProps) => {
     navigation.replace('Home');
   };
 
-  const { mutate, isLoading } = useSignIn();
+  // const { mutate, isLoading } = useSignIn();
 
   const handleSignIn = async () => {
-    mutate(
-      {
-        email: formValue.email,
-        password: formValue.password,
-      },
-      {
-        onSuccess: async (data) => {
-          // console.log(data);
-          await AsyncStorage.setItem('token', data.key);
-          // await AsyncStorage.setItem('token', data.token);
-          handleHomePageRedirect();
-        },
-        onError: () => {
-          toast.show('Invalid Credentials', {
-            type: 'danger',
-          });
-        },
-      }
-    );
+    // mutate(
+    //   {
+    //     email: formValue.email,
+    //     password: formValue.password,
+    //   },
+    //   {
+    //     onSuccess: async (data) => {
+    //       // console.log(data);
+    //       await AsyncStorage.setItem('token', data.key);
+    //       // await AsyncStorage.setItem('token', data.token);
+    //       handleHomePageRedirect();
+    //     },
+    //     onError: () => {
+    //       toast.show('Invalid Credentials', {
+    //         type: 'danger',
+    //       });
+    //     },
+    //   }
+    // );
+    handleHomePageRedirect();
   };
 
   return (
@@ -131,6 +132,7 @@ const SignInScreen = ({ navigation }: SignInProps) => {
                 label='Email Address'
                 // mode='outlined'
                 autoCapitalize='none'
+                keyboardType='email-address'
                 underlineColor='transparent'
                 activeOutlineColor='transparent'
                 selectionColor={Colors['activeTab']}
@@ -207,12 +209,12 @@ const SignInScreen = ({ navigation }: SignInProps) => {
                 accessibilityLabel='Sign Up'
                 labelStyle={styles.buttonLabel}
                 contentStyle={styles.buttonContent}
-                loading={isLoading}
-                disabled={
-                  isLoading ||
-                  formValue.email === '' ||
-                  formValue.password === ''
-                }
+                // loading={isLoading}
+                // disabled={
+                //   isLoading ||
+                //   formValue.email === '' ||
+                //   formValue.password === ''
+                // }
                 onPress={() => handleSignIn()}
 
                 // onPress={() => console.log('Sign Up')}

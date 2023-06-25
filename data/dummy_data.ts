@@ -269,3 +269,73 @@ export const allCategory = [
   },
  
 ]
+
+export const salesCards = [
+  {
+    id: '1',
+    name: 'Profit',
+    amount: '5,739,323.88',
+    type: 'gain',
+    cost: '200,923'
+  },
+  {
+    id: '2',
+    name: 'Net Sales',
+    amount: '5,739,323.88',
+    type: 'loss',
+    cost: '473,383'
+  },
+  {
+    id: '3',
+    name: 'Gross Sales',
+    amount: '5,739,323.88',
+    type: 'gain',
+    cost: '200,923'
+  },
+  {
+    id: '4',
+    name: 'Gross Profit',
+    amount: '5,739,323.88',
+    type: 'loss',
+    cost: '473,383'
+  },
+  {
+    id: '5',
+    name: 'Taxes',
+    amount: '5,739,323.88',
+    type: 'gain',
+    cost: '200,923'
+  },
+  {
+    id: '6',
+    name: 'Expenses',
+    amount: '5,739,323.88',
+    type: 'loss',
+    cost: '473,383'
+  }
+]
+
+export const salesTopProducts = [
+  {
+    id: '1',
+    name: 'Dangote Rice 25kg',
+    amount: '472,000',
+    sold: 5974,
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525414/Mask_group_zcqtxh.png',
+  },
+  {
+    id: '2',
+    name: 'Kings Oil 5kg',
+    amount: '324,000',
+    sold: 4930,
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newoil_bkd6wm.png',
+    
+  },
+  {
+    id: '3',
+    name: 'Knorr Chicken Cubes',
+    amount: '312,500',
+    sold: 4139,
+    image: 'https://res.cloudinary.com/dnc04r7sc/image/upload/v1675525484/newknorr_fdtpel.png',
+  }
+]
