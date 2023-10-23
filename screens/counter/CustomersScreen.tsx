@@ -1,18 +1,25 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Colors from '@/constants/Colors';
 import { TouchableRipple } from 'react-native-paper';
 import { thousandSeperators } from '@/utils/thousandSeperators';
 import { Icon } from '@rneui/themed';
-import { allCustomers } from '@/data/dummy_data';
+import EmptyListComponent from '@/components/EmptyList/EmptyList';
+// import { allCustomers } from '@/data/dummy_data';
 
 const CustomersScreen = () => {
-  type CustomerTypes = {
-    id: string | number;
+  interface CustomerTypes {
+    id: number;
     name: string;
     numberOfItems: number;
     totalAmount: number;
-  };
+  }
+
+  const [allCustomersList, setAllCustomersList] = useState<CustomerTypes[]>([]);
+
+  useEffect(() => {
+    setAllCustomersList([]);
+  }, []);
 
   const renderCustomers = ({ item }: { item: CustomerTypes }) => {
     return (
@@ -52,10 +59,15 @@ const CustomersScreen = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={allCustomers}
+        data={allCustomersList}
         renderItem={renderCustomers}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <EmptyListComponent message='No customers yet.' />
+          </View>
+        }
       />
     </View>
   );
@@ -109,5 +121,9 @@ const styles = StyleSheet.create({
     color: Colors['black'],
     marginRight: 10,
     width: 80,
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: Colors['white'],
   },
 });

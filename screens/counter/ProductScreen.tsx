@@ -4,7 +4,7 @@ import { TouchableRipple } from 'react-native-paper';
 import Colors from '@/constants/Colors';
 // import { Icon, Image } from '@rneui/themed';
 // import { thousandSeperators } from '@/utils/thousandSeperators';
-import { allSales } from '@/data/dummy_data';
+// import { allSales } from '@/data/dummy_data';
 import SingleProduct from '@/components/SingleProduct.tsx/SingleProduct';
 import EmptyListComponent from '@/components/EmptyList/EmptyList';
 import { ProductNavigation } from '@/interfaces/navigation/counter';
@@ -15,9 +15,10 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
 
   useEffect(() => {
     if (activeFilter === 'all') {
-      setFilteredData(allSales);
+      setFilteredData([]);
     } else {
-      setFilteredData(allSales.filter((item) => item.status === activeFilter));
+      setFilteredData([]);
+      // setFilteredData(allSales.filter((item) => item.status === activeFilter));
     }
   }, [activeFilter]);
 
@@ -165,7 +166,7 @@ const ProductScreen = ({ navigation }: ProductNavigation) => {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <EmptyListComponent message='Product is empty' />
+              <EmptyListComponent message='No sales yet.' />
             </View>
           }
         />
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
+    backgroundColor: Colors['white'],
   },
   touchableWrapper: {
     // borderWidth: 1,

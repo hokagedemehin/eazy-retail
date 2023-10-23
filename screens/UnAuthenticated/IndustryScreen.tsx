@@ -22,9 +22,9 @@ import {
   SkinCareSvgComponent,
   TechSvgComponent,
 } from '@/assets/icons';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { useUpdateStore } from '@/hooks/storeHook';
-import { setStoreUser } from '@/store/slice/storeSlice';
+// import { useAppDispatch } from '@/hooks/redux';
+// import { useUpdateStore } from '@/hooks/storeHook';
+// import { setStoreUser } from '@/store/slice/storeSlice';
 
 const IndustryScreen = ({ navigation }: IndustryProps) => {
   // *************** PAGE HEADER ***************
@@ -95,30 +95,30 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
   // ********************** CARD SELECTION **********************
   const [selectedIndustry, setSelectedIndustry] = useState(0);
 
-  const [loadingBtn, setLoadingBtn] = useState(false);
-  const { id } = useAppSelector((state) => state.storeUser);
-  const dispatch = useAppDispatch();
+  // const [loadingBtn, setLoadingBtn] = useState(false);
+  // const { id } = useAppSelector((state) => state.storeUser);
+  // const dispatch = useAppDispatch();
 
-  const { updateStoreMutate, isLoading } = useUpdateStore();
+  // const { updateStoreMutate, isLoading } = useUpdateStore();
 
-  const handleUpdateStore = async () => {
-    setLoadingBtn(true);
-    const data = {
-      id: id,
-      industry: industry[selectedIndustry - 1].name,
-    };
-    updateStoreMutate(data, {
-      onSuccess: (data) => {
-        dispatch(setStoreUser(data));
-        setLoadingBtn(false);
-        navigation.navigate('RegistrationSuccessfull');
-      },
-      onError: (error) => {
-        console.log(error);
-        setLoadingBtn(false);
-      },
-    });
-  };
+  // const handleUpdateStore = async () => {
+  //   setLoadingBtn(true);
+  //   const data = {
+  //     // id: id,
+  //     industry: industry[selectedIndustry - 1].name,
+  //   };
+  //   updateStoreMutate(data, {
+  //     onSuccess: (data) => {
+  //       dispatch(setStoreUser(data));
+  //       setLoadingBtn(false);
+  //       navigation.navigate('RegistrationSuccessfull');
+  //     },
+  //     onError: (error) => {
+  //       console.log(error);
+  //       setLoadingBtn(false);
+  //     },
+  //   });
+  // };
 
   // console.log('id', id);
 
@@ -259,10 +259,10 @@ const IndustryScreen = ({ navigation }: IndustryProps) => {
           accessibilityLabel='Sign Up'
           labelStyle={styles.buttonLabel}
           contentStyle={styles.buttonContent}
-          loading={loadingBtn || isLoading}
-          disabled={loadingBtn || isLoading || selectedIndustry === 0}
+          // loading={loadingBtn || isLoading}
+          // disabled={loadingBtn || isLoading || selectedIndustry === 0}
           // onPress={() => handleSuccessRedirect()}
-          onPress={() => handleUpdateStore()}
+          // onPress={() => handleUpdateStore()}
         >
           Next
         </Button>

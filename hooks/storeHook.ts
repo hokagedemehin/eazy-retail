@@ -1,27 +1,28 @@
 import axios from 'axios';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import BaseUrl from '@/utils/BaseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const BACKEND_URL = BaseUrl();
 
-const BACKEND_URL = BaseUrl()
-
-type postStoreData = {
-  business_name: string;
-  country: string;
-  currency: string;
-  industry: string;
-  user: number;
+interface postStoreData {
+  name: string;
+  country_id: number;
+  currency_id: number;
+  industry_id: number;
+  timezone_id: number;
+  address: string;
 }
 
 type patchStoreData = {
   id?: number;
-  business_name?: string;
-  country?: string;
-  currency?: string;
-  industry?: string;
-  user?: number;
-}
+  name?: string;
+  country_id?: string;
+  currency_id?: string;
+  industry_id?: string;
+  timezone_id?: number;
+  address?: string;
+};
 
 const postStoreFetcher = async (url: string, data: postStoreData) => {
   const token = await AsyncStorage.getItem('token');
@@ -31,7 +32,7 @@ const postStoreFetcher = async (url: string, data: postStoreData) => {
     },
   });
   return response.data;
-}
+};
 
 const patchStoreFetcher = async (url: string, data: patchStoreData) => {
   const token = await AsyncStorage.getItem('token');
@@ -41,18 +42,53 @@ const patchStoreFetcher = async (url: string, data: patchStoreData) => {
     },
   });
   return response.data;
-}
+};
 
 export const useCreateStore = () => {
-  const { mutate, isLoading } = useMutation({
-    mutationFn: (data: postStoreData) => postStoreFetcher(`${BACKEND_URL}/stores/`, data),
+  const createStoreMutation = useMutation({
+    mutationFn: (data: postStoreData) =>
+      postStoreFetcher(`${BACKEND_URL}/company-store`, data),
   });
-  return { createStoreMutate: mutate, isLoading };
-}
+  return createStoreMutation;
+};
 
 export const useUpdateStore = () => {
   const { mutate, isLoading } = useMutation({
-    mutationFn: (data: patchStoreData) => patchStoreFetcher(`${BACKEND_URL}/stores/${data.id}/`, data),
+    mutationFn: (data: patchStoreData) =>
+      patchStoreFetcher(`${BACKEND_URL}/stores/${data.id}/`, data),
   });
   return { updateStoreMutate: mutate, isLoading };
-}
+};
+
+export const useCountry = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['country'],
+    queryFn: () => axios.get(`${BACKEND_URL}/country`),
+  });
+  return { countryData: data?.data?.data, isLoading };
+};
+
+export const useCurrency = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['currency'],
+    queryFn: () => axios.get(`${BACKEND_URL}/currency`),
+  });
+  return { currencyData: data?.data?.data, isLoading };
+};
+
+export const useTimezone = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['timezone'],
+    queryFn: () => axios.get(`${BACKEND_URL}/timezone`),
+  });
+  return { timezoneData: data?.data?.data, isLoading };
+};
+
+export const useIndustry = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['industry'],
+    queryFn: () => axios.get(`${BACKEND_URL}/industry`),
+  });
+
+  return { industryData: data?.data?.data, isLoading };
+};

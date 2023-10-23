@@ -41,27 +41,12 @@ const AllScreens = () => {
   // const navigation = useNavigation();
   // const token = useAppSelector((state) => state.token.token);
   const { onBoarded } = useAppSelector((state) => state.token);
-  // console.log('token', token);
 
   // *************** TOKEN SECURE STORAGE ***************
   const getToken = async () => {
     const result = await AsyncStorage.getItem('token');
     return result;
   };
-
-  // useEffect(() => {
-  //   const getTokenFromStorage = async () => {
-  //     const token = await getToken();
-  //     console.log('token :>> ', token);
-  //     if (token) {
-  //       dispatch(setToken(token));
-  //       setTokenExist(true);
-  //     }
-  //     // setLoadingPage(false);
-  //   };
-  //   getTokenFromStorage();
-  // }, [dispatch]);
-
   // *************** ONBOARDING SECURE STORAGE ***************
   const getOnboarding = async () => {
     // await AsyncStorage.deleteItemAsync('onboarding');
@@ -73,10 +58,8 @@ const AllScreens = () => {
   useEffect(() => {
     const getOnboardingFromStorage = async () => {
       const onboarding = await getOnboarding();
-      // console.log('onboarding', onboarding);
 
       const token = await getToken();
-      // console.log('token :>> ', token);
 
       if (onboarding == null) {
         dispatch(setOnBoarded(true));

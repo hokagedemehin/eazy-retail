@@ -11,7 +11,7 @@ const AllProductList = ({
 }: Omit<AllProductListProps<'AllProducts'>, 'route'>) => {
   const [productsList, setProductsList] = useState([
     {
-      id: '0',
+      id: 0,
       name: 'add new product',
       price: 1000,
       quantity: 10,
@@ -23,7 +23,7 @@ const AllProductList = ({
   useEffect(() => {
     const newData = [
       {
-        id: '0',
+        id: 0,
         name: 'add new product',
         price: 1000,
         quantity: 10,
@@ -34,7 +34,7 @@ const AllProductList = ({
     allProductsList.forEach((product) => {
       newData.push(product);
     });
-    setProductsList(newData);
+    setProductsList([]);
     return () => {
       setProductsList([]);
     };
@@ -42,7 +42,7 @@ const AllProductList = ({
   }, []);
 
   type ProductTypes = {
-    id: string | number;
+    id: number;
     name: string;
     price: number;
     quantity: number;
@@ -99,7 +99,7 @@ const AllProductList = ({
       <FlatList
         data={productsList}
         renderItem={renderProducts}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -163,6 +163,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Givonic-SemiBold',
     color: Colors['black'],
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: Colors['white'],
   },
 
   // ****************** add new product card ******************

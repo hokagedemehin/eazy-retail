@@ -1,17 +1,17 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SignInProps } from '../../interfaces/navigation/navigation';
 import Colors from '../../constants/Colors';
 import { Button, TextInput, TouchableRipple } from 'react-native-paper';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { useGetUser, useSignIn } from '@/hooks/auth';
-// import axios from 'axios';
-// import BaseUrl from '@/utils/BaseUrl';
-// import { setUser } from '@/store/slice/userSlice';
-// import { useAppDispatch } from '@/hooks/redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useGetUser, useSignIn } from '@/hooks/auth';
 import LoadingComp from '@/components/Loading/LoadingComp';
 import { useToast } from 'react-native-toast-notifications';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppDispatch } from '@/hooks/redux';
+import { setUser } from '@/store/slice/userSlice';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import axios, { AxiosError } from 'axios';
+import BaseUrl from '@/utils/BaseUrl';
 
 const SignInScreen = ({ navigation }: SignInProps) => {
   // useLayoutEffect(() => {
@@ -32,40 +32,41 @@ const SignInScreen = ({ navigation }: SignInProps) => {
   // }, [navigation]);
 
   // ****** CHECK FOR USER | REDIRECT TO HOME PAGE ********
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [loadingPage, setLoadingPage] = useState(false);
   const toast = useToast();
 
-  // const { userData } = useGetUser();
+  const { userData } = useGetUser();
+  // console.log('userData', userData);
+  useEffect(() => {
+    async function checkUser() {
+      setLoadingPage(true);
+      const token = await AsyncStorage.getItem('token');
+      // console.log('token', token);
+      // const onboarding_progress = await AsyncStorage.getItem(
+      //   'easyretail_onboarding'
+      // );
+      // if (onboarding_progress === 'verification') {
+      //   navigation.navigate('PhoneVerification');
+      // } else if (onboarding_progress === 'store_creation') {
+      //   navigation.navigate('BusinessName');
+      // } else
+      if (userData?.comapnies?.length === 0) {
+        navigation.replace('BusinessName');
+        toast.show('Please create your store', {
+          type: 'danger',
+        });
+        return;
+      }
+      if (token) {
+        dispatch(setUser(userData));
+        navigation.replace('Home');
+      }
 
-  // useEffect(() => {
-  //   // const BACKEND_URL = BaseUrl();
-
-  //   // const checkUser = async () => {
-  //   //   // try {
-  //   //   //   const result = await AsyncStorage.getItemAsync('token');
-  //   //   //   const data = await axios.get(`${BACKEND_URL}/dj-rest-auth/user/`, {
-  //   //   //     headers: {
-  //   //   //       Authorization: `Bearer ${result}`,
-  //   //   //     },
-  //   //   //   });
-  //   //   //   if (data.data) {
-  //   //   //     dispatch(setUser(data.data));
-  //   //   //     navigation.replace('Home');
-  //   //   //   }
-  //   //   // } catch (error) {
-  //   //   //   // console.error(error);
-  //   //   // }
-
-  //   // };
-  //   // checkUser();
-
-  //   if (userData) {
-  //     dispatch(setUser(userData));
-  //     navigation.replace('Home');
-  //   }
-  //   setLoadingPage(false);
-  // }, [dispatch, navigation, userData]);
+      setLoadingPage(false);
+    }
+    checkUser();
+  }, [dispatch, navigation, userData]);
 
   const [showPassword, setShowPassword] = useState(false);
   // const [loadingBtn, setloadingBtn] = useState(false);
@@ -73,11 +74,11 @@ const SignInScreen = ({ navigation }: SignInProps) => {
     setShowPassword((prevState) => !prevState);
   }
 
-  const [formValue, setFormValue] = useState({
-    // username: 'mary',
-    email: '',
-    password: '',
-  });
+  // const [formValue, setFormValue] = useState({
+  //   // username: 'mary',
+  //   email: '',
+  //   password: '',
+  // });
 
   // console.log(formValue);
 
@@ -85,34 +86,121 @@ const SignInScreen = ({ navigation }: SignInProps) => {
     navigation.replace('SignUp');
   };
 
-  const handleHomePageRedirect = () => {
-    // console.log('Redirect to Home Page');
-    navigation.replace('Home');
-  };
+  // const handleHomePageRedirect = () => {
+  //   // console.log('Redirect to Home Page');
+  //   navigation.replace('Home');
+  // };
 
-  // const { mutate, isLoading } = useSignIn();
+  const { mutate } = useSignIn();
 
-  const handleSignIn = async () => {
-    // mutate(
-    //   {
-    //     email: formValue.email,
-    //     password: formValue.password,
-    //   },
-    //   {
-    //     onSuccess: async (data) => {
-    //       // console.log(data);
-    //       await AsyncStorage.setItem('token', data.key);
-    //       // await AsyncStorage.setItem('token', data.token);
-    //       handleHomePageRedirect();
-    //     },
-    //     onError: () => {
-    //       toast.show('Invalid Credentials', {
-    //         type: 'danger',
-    //       });
-    //     },
-    //   }
-    // );
-    handleHomePageRedirect();
+  // const handleSignIn = async () => {
+  //   mutate(
+  //     {
+  //       email: formValue.email,
+  //       password: formValue.password,
+  //     },
+  //     {
+  //       onSuccess: async (data) => {
+  //         console.log(data);
+  //         await AsyncStorage.setItem('token', data.token);
+  //         // await AsyncStorage.setItem('token', data.token);
+  //         handleHomePageRedirect();
+  //       },
+  //       onError: () => {
+  //         toast.show('Invalid Credentials', {
+  //           type: 'danger',
+  //         });
+  //       },
+  //     }
+  //   );
+  //   // handleHomePageRedirect();
+  // };
+
+  // ************ REACT HOOK FORM ************
+  interface IFormInput {
+    email: string;
+    password: string;
+  }
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    try {
+      mutate(data, {
+        onSuccess: async (data) => {
+          // const onboarding_progress = await AsyncStorage.getItem(
+          //   'easyretail_onboarding'
+          // );
+          // if (onboarding_progress === 'verification') {
+          //   toast.show("You haven't verified your email", {
+          //     type: 'danger',
+          //   });
+          //   navigation.navigate('PhoneVerification');
+          // } else if (onboarding_progress === 'store_creation') {
+          //   toast.show('Please create your store', {
+          //     type: 'danger',
+          //   });
+          //   navigation.navigate('BusinessName');
+          // } else {
+          // }
+          const BACKEND_URL = BaseUrl();
+          const response = await axios.get(`${BACKEND_URL}/user`, {
+            headers: {
+              Authorization: `Bearer ${data.token}`,
+            },
+          });
+          // console.log('profile data', response?.data);
+          if (response?.data?.data?.companies?.length > 0) {
+            await AsyncStorage.setItem('token', data.token);
+            toast.show('Login successfully', { type: 'success' });
+            reset();
+            dispatch(setUser(data?.user));
+            navigation.replace('Home');
+            // console.log(data);
+          } else {
+            toast.show('Please create your store', {
+              type: 'danger',
+            });
+            navigation.navigate('BusinessName');
+          }
+        },
+        onError: (error) => {
+          if (error instanceof AxiosError) {
+            toast.show(error?.response?.data?.message, {
+              type: 'danger',
+            });
+            console.error(error?.response?.data);
+            if (error?.response?.data?.errors?.email) {
+              toast.show(error?.response?.data?.errors?.email[0], {
+                type: 'danger',
+              });
+            } else if (error?.response?.data?.errors?.password) {
+              toast.show(error?.response?.data?.errors?.password[0], {
+                type: 'danger',
+              });
+            } else {
+              toast.show('Something went wrong, Please try again later.', {
+                type: 'danger',
+              });
+            }
+          }
+        },
+      });
+    } catch (error) {
+      toast.show('Something went wrong, Please try again later.', {
+        type: 'danger',
+      });
+    }
   };
 
   return (
@@ -127,71 +215,125 @@ const SignInScreen = ({ navigation }: SignInProps) => {
           <View>
             <Text style={styles.subtitle}>Welcome back,</Text>
             <Text style={styles.title}>Log In</Text>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                label='Email Address'
-                // mode='outlined'
-                autoCapitalize='none'
-                keyboardType='email-address'
-                underlineColor='transparent'
-                activeOutlineColor='transparent'
-                selectionColor={Colors['activeTab']}
-                contentStyle={styles.inputContent}
-                value={formValue.email}
-                onChangeText={(text) =>
-                  setFormValue({ ...formValue, email: text })
-                }
-                theme={{
-                  colors: {
-                    primary: Colors['black'],
-                    text: Colors['black'],
-                    placeholder: Colors['white'],
-                    background: Colors['white'],
-                    surfaceVariant: Colors['white'],
-                  },
-                }}
-              />
-              <View style={styles.hideUnderline}></View>
-            </View>
-            <View style={styles.passwordInputWrapper}>
-              <TextInput
-                label='Password'
-                underlineColor='transparent'
-                activeOutlineColor='transparent'
-                selectionColor={Colors['activeTab']}
-                contentStyle={styles.inputContent}
-                value={formValue.password}
-                onChangeText={(text) =>
-                  setFormValue({ ...formValue, password: text })
-                }
-                theme={{
-                  colors: {
-                    primary: Colors['black'],
-                    text: Colors['black'],
-                    placeholder: Colors['white'],
-                    background: Colors['white'],
-                    surfaceVariant: Colors['white'],
-                  },
-                }}
-                secureTextEntry={showPassword ? false : true}
-                autoCapitalize='none'
-                right={
-                  <TextInput.Icon
-                    icon={showPassword ? 'eye' : 'eye-off'}
-                    onPress={togglePassword}
-                    style={styles.inputIcon}
-                    theme={{
-                      colors: {
-                        primary: Colors['black'],
-                        text: Colors['black'],
-                        // placeholder: Colors['white'],
-                        background: Colors['white'],
+            <View>
+              {/* email */}
+              <View style={styles.inputContainer}>
+                <View
+                  style={[
+                    styles.inputWrapper,
+                    errors.email && { borderColor: Colors['red-500'] },
+                  ]}
+                >
+                  <Controller
+                    name='email'
+                    control={control}
+                    rules={{
+                      required: 'Email is required',
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: 'Email address must be valid',
                       },
                     }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        label='Email Address'
+                        autoCapitalize='none'
+                        onBlur={onBlur}
+                        keyboardType='email-address'
+                        underlineColor='transparent'
+                        activeOutlineColor='transparent'
+                        selectionColor={Colors['activeTab']}
+                        contentStyle={styles.inputContent}
+                        value={value}
+                        onChangeText={(value) => onChange(value)}
+                        theme={{
+                          colors: {
+                            primary: Colors['black'],
+                            text: Colors['black'],
+                            placeholder: Colors['white'],
+                            background: Colors['white'],
+                            surfaceVariant: Colors['white'],
+                          },
+                        }}
+                      />
+                    )}
                   />
-                }
-              />
-              <View style={styles.hideUnderline}></View>
+                  <View style={styles.hideUnderline}></View>
+                </View>
+                {errors.email && (
+                  <Text style={styles.errorText}>{errors.email.message}</Text>
+                )}
+              </View>
+              {/* password */}
+              <View style={styles.inputContainer}>
+                <View
+                  style={[
+                    styles.passwordInputWrapper,
+                    errors.password && { borderColor: Colors['red-500'] },
+                  ]}
+                >
+                  <Controller
+                    name='password'
+                    control={control}
+                    rules={{
+                      required: 'Password is required',
+                      minLength: {
+                        value: 8,
+                        message: 'Password must be at least 8 characters',
+                      },
+                      pattern: {
+                        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                        message:
+                          'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number',
+                      },
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        label='Password'
+                        underlineColor='transparent'
+                        onBlur={onBlur}
+                        onChangeText={(value) => onChange(value)}
+                        value={value}
+                        activeOutlineColor='transparent'
+                        selectionColor={Colors['activeTab']}
+                        contentStyle={styles.inputContent}
+                        theme={{
+                          colors: {
+                            primary: Colors['black'],
+                            text: Colors['black'],
+                            placeholder: Colors['white'],
+                            background: Colors['white'],
+                            surfaceVariant: Colors['white'],
+                          },
+                        }}
+                        secureTextEntry={showPassword ? false : true}
+                        autoCapitalize='none'
+                        right={
+                          <TextInput.Icon
+                            icon={showPassword ? 'eye' : 'eye-off'}
+                            onPress={togglePassword}
+                            style={styles.inputIcon}
+                            theme={{
+                              colors: {
+                                primary: Colors['black'],
+                                text: Colors['black'],
+                                background: Colors['white'],
+                              },
+                            }}
+                          />
+                        }
+                      />
+                    )}
+                  />
+
+                  <View style={styles.hideUnderline}></View>
+                </View>
+                {errors.password && (
+                  <Text style={styles.errorText}>
+                    {errors.password.message}
+                  </Text>
+                )}
+              </View>
             </View>
             <View style={styles.forgotPasswordWrapper}>
               <TouchableRipple onPress={() => console.log('Forgot Password?')}>
@@ -209,15 +351,8 @@ const SignInScreen = ({ navigation }: SignInProps) => {
                 accessibilityLabel='Sign Up'
                 labelStyle={styles.buttonLabel}
                 contentStyle={styles.buttonContent}
-                // loading={isLoading}
-                // disabled={
-                //   isLoading ||
-                //   formValue.email === '' ||
-                //   formValue.password === ''
-                // }
-                onPress={() => handleSignIn()}
-
-                // onPress={() => console.log('Sign Up')}
+                // onPress={() => handleSignIn()}
+                onPress={handleSubmit(onSubmit)}
               >
                 Log In
               </Button>
@@ -269,27 +404,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputWrapper: {
-    // marginBottom: 20,
-    // paddingTop: 5,
-    // paddingBottom: 12,
-    // // borderWidth: 1,
-    // backgroundColor: Colors['white'],
-    // borderRadius: 5,
+    // marginBottom: 10,
+    // borderRadius: 10,
+    // overflow: 'hidden',
+    // borderWidth: 0.5,
+    // borderColor: Colors['border'],
 
-    marginBottom: 10,
     borderRadius: 10,
     overflow: 'hidden',
     borderWidth: 0.5,
     borderColor: Colors['border'],
   },
   passwordInputWrapper: {
-    // paddingTop: 5,
-    // paddingBottom: 12,
-    // // borderWidth: 1,
-    // backgroundColor: Colors['white'],
-    // borderRadius: 5,
-
-    marginBottom: 10,
     borderRadius: 10,
     overflow: 'hidden',
     borderWidth: 0.5,
@@ -300,7 +426,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   inputContent: {
-    // backgroundColor: 'white',
+    backgroundColor: 'white',
   },
   hideUnderline: {
     marginTop: -4,
@@ -356,5 +482,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Givonic-SemiBold',
     color: Colors['grey-700'],
+  },
+  inputContainer: {
+    marginBottom: 15,
+  },
+  passwordWrapper: {
+    marginBottom: 15,
+  },
+  errorText: {
+    color: Colors['red'],
+    fontSize: 13,
+    fontFamily: 'Outfit-Regular',
   },
 });

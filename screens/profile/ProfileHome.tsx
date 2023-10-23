@@ -14,17 +14,22 @@ import ProfileCardComponent from '@/components/Profile/ProfileCard';
 // import BaseUrl from '@/utils/BaseUrl';
 // import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeaderComponent from '@/components/Header/HeaderComponent';
 import Colors from '@/constants/Colors';
 // import { useAppDispatch } from '@/hooks/redux';
 import { ProfileHomeProps } from '@/interfaces/navigation/profile';
+import { useGetUser } from '@/hooks/auth';
+import { useAppDispatch } from '@/hooks/redux';
+import { setUser } from '@/store/slice/userSlice';
+import { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const ProfileHome = ({
   navigation,
 }: Omit<ProfileHomeProps<'ProfileHome'>, 'route'>) => {
   // ******************* HIDE TABS *******************
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   // useEffect(() => {
   //   dispatch(getParentName('hideScreen'));
@@ -32,7 +37,13 @@ const ProfileHome = ({
   //     dispatch(getParentName(''));
   //   };
   // }, [dispatch]);
-
+  const { userData } = useGetUser();
+  // console.log('userData :>> ', userData);
+  useEffect(() => {
+    if (userData) {
+      dispatch(setUser(userData));
+    }
+  }, [dispatch, userData]);
   // ****************** GO BACK ******************
   const handleBack = () => {
     navigation.goBack();
@@ -42,14 +53,18 @@ const ProfileHome = ({
   const handleSubscription = () => {
     navigation.navigate('Subscriptions');
   };
-
+  const queryClient = useQueryClient();
   const handleLogOut = async () => {
     try {
       // await axios.post(`${BaseUrl}/dj-rest-auth/logout/`, null);
-      await AsyncStorage.removeItem('token');
+      const token = await AsyncStorage.removeItem('token');
+      console.log('token', token);
+      queryClient.clear();
       navigation.replace('SignIn');
     } catch (error) {
-      console.error(error);
+      if (error instanceof AxiosError) {
+        console.error(error.response?.data);
+      }
     }
   };
 
@@ -86,7 +101,7 @@ const ProfileHome = ({
       id: 5,
       title: 'Logout',
       icon: <ProfileLogoutSvgComponent fill={Colors['purple']} />,
-      onPress: () => handleLogOut(),
+      onPress: async () => await handleLogOut(),
       showArrow: false,
     },
   ];
@@ -108,7 +123,7 @@ const ProfileHome = ({
             />
             <View style={styles.nameTitle}>
               <Text numberOfLines={1} style={styles.name}>
-                Jane Smith
+                {userData?.firstname} {userData?.lastname}
               </Text>
               <View style={styles.roleSerial}>
                 <Chip

@@ -6,12 +6,13 @@ import {
   StyleSheet,
   Text,
   View,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {
-  useEffect,
+  // useEffect,
   useLayoutEffect,
   // useMemo,
-  useRef,
+  // useRef,
   useState,
   // useCallback,
 } from 'react';
@@ -24,20 +25,34 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 // import DropDownPicker from 'react-native-dropdown-picker';
-import axios from 'axios';
-import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
+// import axios from 'axios';
+import ActionSheet from 'react-native-actions-sheet';
 import { BackSvgComponent } from '@/assets/icons';
-import { useUpdateStore } from '@/hooks/storeHook';
+import { useCreateStore } from '@/hooks/storeHook';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { setStoreUser } from '@/store/slice/storeSlice';
-// import { FlashList } from '@shopify/flash-list';
-// import {
-//   BottomSheetModal,
-//   BottomSheetModalProvider,
-//   BottomSheetFlatList as FlatList2,
-// } from '@gorhom/bottom-sheet';
+import {
+  useAddressInput,
+  useCountrySelector,
+  useCurrencySelector,
+  useIndustrySelector,
+  useTimezoneSelector,
+} from './store/createStore';
+import {
+  setStoreCountry,
+  setStoreCurrency,
+  setStoreId,
+  setStoreIndustry,
+  setStoreTimezone,
+  setStoreUser,
+} from '@/store/slice/storeSlice';
+import { AxiosError } from 'axios';
+import { useToast } from 'react-native-toast-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
+  const dispatch = useAppDispatch();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Back',
@@ -53,7 +68,18 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
       headerLeft: () => (
         <IconButton
           icon={() => <BackSvgComponent />}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            navigation.goBack();
+            dispatch(
+              setStoreUser({
+                country_id: 0,
+                name: '',
+                currency_id: 0,
+                industry_id: 0,
+                address: '',
+              })
+            );
+          }}
         />
       ),
       headerRight: () => (
@@ -66,199 +92,263 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
       ),
       // headerTitleAlign: 'center',
     });
-  }, [navigation]);
+  }, [navigation, dispatch]);
 
-  // *************** BOTTOM SHEET ***************
-  const actionSheetRef = useRef<ActionSheetRef>(null);
-  const currencyActionSheetRef = useRef<ActionSheetRef>(null);
+  interface Country {
+    code: string;
+    id: number;
+    name: string;
+  }
 
-  const handleShowCountryList = () => {
-    actionSheetRef.current?.show();
-  };
+  interface Currency {
+    code: string;
+    id: number;
+    name: string;
+    symbol: string;
+  }
 
-  const handleShowCurrencyList = () => {
-    currencyActionSheetRef.current?.show();
-  };
+  interface Industry {
+    // code: string;
+    id: number;
+    name: string;
+  }
 
-  type Country = {
-    label: string;
-    value: string;
-  };
-
-  type Currency = {
-    label: string;
-    value: string;
-  };
-
-  const [countries, setCountries] = useState([] as Country[]);
-  const [searchCountries, setsearchCountries] = useState([] as Country[]);
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [currencies, setCurrencies] = useState([] as Currency[]);
-  const [selectedCurrency, setSelectedCurrency] = useState('');
+  interface Timezone {
+    id: number;
+    name: string;
+    code: string;
+  }
 
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const { id } = useAppSelector((state) => state.storeUser);
-  const dispatch = useAppDispatch();
-  console.log('id', id);
+  const { country_id, name, currency_id, industry_id, address, timezone_id } =
+    useAppSelector((state) => state.storeUser);
 
-  const { updateStoreMutate, isLoading } = useUpdateStore();
+  // const { updateStoreMutate, isLoading } = useUpdateStore();
 
-  const handleUpdateStore = async () => {
+  const {
+    actionSheetRef,
+    handleShowCountryList,
+    countries,
+    setCountries,
+    search,
+    setSearch,
+    handleSearch,
+    selectedCountry,
+    setSelectedCountry,
+    // countryData,
+    searchCountries,
+  } = useCountrySelector();
+
+  const {
+    currencyActionSheetRef,
+    handleShowCurrencyList,
+    currencies,
+    setCurrencies,
+    currencySearch,
+    setCurrencySearch,
+    handleCurrencySearch,
+
+    selectedCurrency,
+    setSelectedCurrency,
+    // currencyData,
+    searchCurrency,
+  } = useCurrencySelector();
+
+  const {
+    industryActionSheetRef,
+    handleShowIndustryList,
+    industries,
+    setIndustries,
+    industrySearch,
+    setIndustrySearch,
+    handleIndustrySearch,
+    selectedIndustry,
+    setSelectedIndustry,
+    // industryData,
+    searchIndustry,
+  } = useIndustrySelector();
+
+  const {
+    timezoneActionSheetRef,
+    handleShowTimezoneList,
+    timezones,
+    setTimezones,
+    timezoneSearch,
+    setTimezoneSearch,
+    handleTimezoneSearch,
+    selectedTimezone,
+    setSelectedTimezone,
+    // timezoneData,
+    searchTimezone,
+  } = useTimezoneSelector();
+
+  const { addressValue, setAddressValue, handleAddressChange } =
+    useAddressInput();
+  const createStoreMutation = useCreateStore();
+  const toast = useToast();
+  const handleCreateStore = async () => {
     setLoadingBtn(true);
     const data = {
-      id: id,
-      country: selectedCountry,
-      currency: selectedCurrency,
+      country_id: country_id,
+      name: name,
+      currency_id: currency_id,
+      industry_id: industry_id,
+      address: address,
+      timezone_id: timezone_id,
     };
-    updateStoreMutate(data, {
-      onSuccess: (data) => {
-        dispatch(setStoreUser(data));
+    createStoreMutation.mutate(data, {
+      onSuccess: async (data) => {
+        toast.show(data?.message, {
+          type: 'success',
+        });
+        setSelectedCountry({
+          code: '',
+          id: 0,
+          name: '',
+        });
+        setSelectedCurrency({
+          code: '',
+          id: 0,
+          name: '',
+          symbol: '',
+        });
+        setSelectedIndustry({
+          id: 0,
+          name: '',
+        });
+        setSelectedTimezone({
+          id: 0,
+          name: '',
+          code: '',
+        });
+        setAddressValue('');
+        dispatch(
+          setStoreId({
+            id: data?.company?.id,
+          })
+        );
         setLoadingBtn(false);
-        navigation.navigate('SelectIndustry');
+        await AsyncStorage.setItem('easyretail_onboarding', 'completed');
+        navigation.navigate('RegistrationSuccessfull');
       },
       onError: (error) => {
-        console.log(error);
+        console.error(error);
         setLoadingBtn(false);
+        if (error instanceof AxiosError) {
+          console.error(error?.response?.data);
+          if (error?.response?.data?.message) {
+            toast.show(error?.response?.data?.message, {
+              type: 'danger',
+            });
+          }
+          if (error?.response?.data?.errors?.name) {
+            toast.show(error?.response?.data?.errors?.name[0], {
+              type: 'danger',
+            });
+          }
+          if (error?.response?.data?.errors?.address) {
+            toast.show(error?.response?.data?.errors?.address[0], {
+              type: 'danger',
+            });
+          }
+          if (error?.response?.data?.errors?.country_id) {
+            toast.show(error?.response?.data?.errors?.country_id[0], {
+              type: 'danger',
+            });
+          }
+          if (error?.response?.data?.errors?.currency_id) {
+            toast.show(error?.response?.data?.errors?.currency_id[0], {
+              type: 'danger',
+            });
+          }
+          if (error?.response?.data?.errors?.industry_id) {
+            toast.show(error?.response?.data?.errors?.industry_id[0], {
+              type: 'danger',
+            });
+          }
+          if (error?.response?.data?.errors?.timezone_id) {
+            toast.show(error?.response?.data?.errors?.timezone_id[0], {
+              type: 'danger',
+            });
+          }
+        }
       },
     });
   };
-
-  // console.log('currencies', currencies);
-
-  type restCountryProps = {
-    name: {
-      common: string;
-    };
-    currencies: {
-      [key: string]: {
-        name: string;
-        symbol: string;
-      };
-    };
-  };
-
-  useEffect(() => {
-    const neededCountries = [
-      'Nigeria',
-      'United States',
-      'United Kingdom',
-      'Canada',
-      'Australia',
-      'South Africa',
-      'India',
-    ];
-    async function fetchCountry() {
-      try {
-        const { data } = await axios.get('https://restcountries.com/v3.1/all');
-        const countryArr = [] as Country[];
-        const currencyArr = [] as Currency[];
-
-        // filter the data to get the object where name.common is equal to Nigeria, United States, United Kingdom, Canada, Australia, South Africa, and India
-
-        const filteredData = data.filter((country: restCountryProps) => {
-          const { common } = country.name;
-          return neededCountries.includes(common);
-        });
-
-        // console.log('filteredData :>> ', filteredData);
-
-        filteredData.forEach((country: restCountryProps) => {
-          // data.forEach((country: restCountryProps) => {
-          const { common } = country.name;
-          const { currencies } = country;
-
-          countryArr.push({
-            label: common,
-            value: common,
-          });
-
-          const currencyName =
-            currencies !== undefined ? Object.keys(currencies)[0] : '';
-
-          if (currencyName) {
-            const currencySymbol =
-              currencyName && currencies[currencyName].symbol;
-            const currencyFullName =
-              currencyName && currencies[currencyName].name;
-            currencyArr.push({
-              label: `${currencyFullName} (${currencySymbol})`,
-              value: currencyFullName,
-            });
-          }
-        });
-
-        countryArr.sort((a, b) => {
-          if (a.label < b.label) {
-            return -1;
-          }
-          if (a.label > b.label) {
-            return 1;
-          }
-          return 0;
-        });
-
-        setCountries(countryArr);
-        setsearchCountries(countryArr);
-        setCurrencies(currencyArr);
-
-        // console.log('data :>> ', data[2]);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchCountry();
-  }, []);
-
-  // ********** SEARCH BAR **********
-  const [search, setSearch] = useState('');
-
-  const handleSearch = (text: string) => {
-    if (text.length > 0) {
-      const newData = countries.filter((item) => {
-        const itemData = item.label ? item.label : '';
-        const textData = text;
-        return itemData.indexOf(textData) > -1;
-      });
-      setCountries(newData);
-    } else {
-      setCountries(searchCountries);
-    }
-  };
-
-  // const handleIndustryRedirect = () => {
-  //   navigation.navigate('SelectIndustry');
-  // };
-
   // **************** RENDER ITEM ****************
-  const renderCountryItem = ({ item }: { item: Country }) => (
-    <TouchableRipple
-      rippleColor={Colors['white']}
-      onPress={() => {
-        setSelectedCountry(item.value);
-        actionSheetRef.current?.hide();
-        setSearch('');
-        setCountries(searchCountries);
-      }}
-    >
-      <View style={styles.item}>
-        <Text numberOfLines={1} style={styles.itemText}>
-          {item.label}
-        </Text>
-      </View>
-    </TouchableRipple>
-  );
+  const renderCountryItem = ({ item }: { item: Country }) => {
+    return (
+      <TouchableRipple
+        rippleColor={Colors['white']}
+        onPress={() => {
+          setSelectedCountry(item);
+          actionSheetRef.current?.hide();
+          setSearch('');
+          setCountries(searchCountries);
+          dispatch(setStoreCountry(item.id));
+        }}
+      >
+        <View style={styles.item}>
+          <Text numberOfLines={1} style={styles.itemText}>
+            {item.name}
+          </Text>
+        </View>
+      </TouchableRipple>
+    );
+  };
 
   const renderCurrencyItem = ({ item }: { item: Currency }) => (
     <TouchableRipple
       rippleColor={Colors['white']}
       onPress={() => {
-        setSelectedCurrency(item.value);
+        setSelectedCurrency(item);
         currencyActionSheetRef.current?.hide();
+        setCurrencySearch('');
+        setCurrencies(searchCurrency);
+        dispatch(setStoreCurrency(item.id));
       }}
     >
       <View style={styles.item}>
         <Text numberOfLines={1} style={styles.itemText}>
-          {item.label}
+          {item.name} ({item.symbol})
+        </Text>
+      </View>
+    </TouchableRipple>
+  );
+
+  const renderIndustryItem = ({ item }: { item: Industry }) => (
+    <TouchableRipple
+      rippleColor={Colors['white']}
+      onPress={() => {
+        setSelectedIndustry(item);
+        industryActionSheetRef.current?.hide();
+        setIndustrySearch('');
+        setIndustries(searchIndustry);
+        dispatch(setStoreIndustry(item.id));
+      }}
+    >
+      <View style={styles.item}>
+        <Text numberOfLines={1} style={styles.itemText}>
+          {item.name}
+        </Text>
+      </View>
+    </TouchableRipple>
+  );
+
+  const renderTimezoneItem = ({ item }: { item: Timezone }) => (
+    <TouchableRipple
+      rippleColor={Colors['white']}
+      onPress={() => {
+        setSelectedTimezone(item);
+        timezoneActionSheetRef.current?.hide();
+        setTimezoneSearch('');
+        setTimezones(searchTimezone);
+        dispatch(setStoreTimezone(item.id));
+      }}
+    >
+      <View style={styles.item}>
+        <Text numberOfLines={1} style={styles.itemText}>
+          {item.code}
         </Text>
       </View>
     </TouchableRipple>
@@ -266,196 +356,438 @@ const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
 
   return (
     <SafeAreaView style={styles.safeAreaStyle}>
-      <ScrollView
-        contentContainerStyle={styles.containerContent}
-        style={styles.container}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.safeAreaStyle}
       >
-        <View>
-          <View style={styles.inputWrapper}>
-            <TouchableRipple
-              // onPress={() => console.log('country')}
-              onPress={() => handleShowCountryList()}
-              // onPress={() => handlePresentModalPress()}
-              rippleColor={Colors['background']}
+        <ScrollView
+          contentContainerStyle={styles.containerContent}
+          style={styles.container}
+        >
+          <View>
+            {/* country */}
+            <View style={styles.inputWrapper}>
+              <TouchableRipple
+                // onPress={() => console.log('country')}
+                onPress={() => handleShowCountryList()}
+                // onPress={() => handlePresentModalPress()}
+                rippleColor={Colors['background']}
+              >
+                <TextInput
+                  label='Country'
+                  underlineColor='transparent'
+                  activeOutlineColor='transparent'
+                  selectionColor={Colors['activeTab']}
+                  contentStyle={styles.inputContent}
+                  style={styles.input}
+                  editable={false}
+                  theme={{
+                    colors: {
+                      primary: Colors['black'],
+                      text: Colors['black'],
+                      placeholder: Colors['white'],
+                      background: Colors['white'],
+                      surfaceVariant: Colors['white'],
+                    },
+                  }}
+                  // multiline={true}
+                  value={selectedCountry.name}
+                  right={
+                    <TextInput.Icon
+                      icon={'chevron-down'}
+                      // onPress={() => console.log('pressed')}
+                      onPress={() => handleShowCountryList()}
+                      style={styles.inputIcon}
+                      theme={{
+                        colors: {
+                          primary: Colors['black'],
+                          text: Colors['black'],
+                          // placeholder: Colors['white'],
+                          background: Colors['white'],
+                        },
+                      }}
+                    />
+                  }
+                />
+              </TouchableRipple>
+              <View style={styles.hideUnderline}></View>
+            </View>
+            {/* currency */}
+            <View style={styles.inputWrapper}>
+              <Pressable onPress={() => handleShowCurrencyList()}>
+                <TextInput
+                  label='Currency'
+                  underlineColor='transparent'
+                  activeOutlineColor='transparent'
+                  selectionColor={Colors['activeTab']}
+                  contentStyle={styles.inputContent}
+                  style={styles.input}
+                  editable={false}
+                  theme={{
+                    colors: {
+                      primary: Colors['black'],
+                      text: Colors['black'],
+                      placeholder: Colors['white'],
+                      background: Colors['white'],
+                      surfaceVariant: Colors['white'],
+                    },
+                  }}
+                  // multiline={true}
+                  value={
+                    selectedCurrency.name
+                      ? `${selectedCurrency.name} (${selectedCurrency.symbol})`
+                      : ''
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon={'chevron-down'}
+                      // onPress={() => console.log('pressed')}
+                      onPress={() => handleShowCurrencyList()}
+                      style={styles.inputIcon}
+                      theme={{
+                        colors: {
+                          primary: Colors['black'],
+                          text: Colors['black'],
+                          // placeholder: Colors['white'],
+                          background: Colors['white'],
+                        },
+                      }}
+                    />
+                  }
+                />
+              </Pressable>
+              <View style={styles.hideUnderline}></View>
+            </View>
+            {/* timezone */}
+            <View style={styles.inputWrapper}>
+              <Pressable onPress={() => handleShowTimezoneList()}>
+                <TextInput
+                  label='Timezone'
+                  underlineColor='transparent'
+                  activeOutlineColor='transparent'
+                  selectionColor={Colors['activeTab']}
+                  contentStyle={styles.inputContent}
+                  style={styles.input}
+                  editable={false}
+                  theme={{
+                    colors: {
+                      primary: Colors['black'],
+                      text: Colors['black'],
+                      placeholder: Colors['white'],
+                      background: Colors['white'],
+                      surfaceVariant: Colors['white'],
+                    },
+                  }}
+                  // multiline={true}
+                  value={selectedTimezone.code}
+                  right={
+                    <TextInput.Icon
+                      icon={'chevron-down'}
+                      // onPress={() => console.log('pressed')}
+                      onPress={() => handleShowTimezoneList()}
+                      style={styles.inputIcon}
+                      theme={{
+                        colors: {
+                          primary: Colors['black'],
+                          text: Colors['black'],
+                          // placeholder: Colors['white'],
+                          background: Colors['white'],
+                        },
+                      }}
+                    />
+                  }
+                />
+              </Pressable>
+              <View style={styles.hideUnderline}></View>
+            </View>
+            {/* industry */}
+            <View style={styles.inputWrapper}>
+              <Pressable onPress={() => handleShowIndustryList()}>
+                <TextInput
+                  label='Industry'
+                  underlineColor='transparent'
+                  activeOutlineColor='transparent'
+                  selectionColor={Colors['activeTab']}
+                  contentStyle={styles.inputContent}
+                  style={styles.input}
+                  editable={false}
+                  theme={{
+                    colors: {
+                      primary: Colors['black'],
+                      text: Colors['black'],
+                      placeholder: Colors['white'],
+                      background: Colors['white'],
+                      surfaceVariant: Colors['white'],
+                    },
+                  }}
+                  // multiline={true}
+                  value={selectedIndustry.name}
+                  right={
+                    <TextInput.Icon
+                      icon={'chevron-down'}
+                      // onPress={() => console.log('pressed')}
+                      onPress={() => handleShowIndustryList()}
+                      style={styles.inputIcon}
+                      theme={{
+                        colors: {
+                          primary: Colors['black'],
+                          text: Colors['black'],
+                          // placeholder: Colors['white'],
+                          background: Colors['white'],
+                        },
+                      }}
+                    />
+                  }
+                />
+              </Pressable>
+              <View style={styles.hideUnderline}></View>
+            </View>
+            {/* address */}
+            <View style={styles.inputWrapper}>
+              <TextInput
+                label='Address'
+                underlineColor='transparent'
+                activeOutlineColor='transparent'
+                selectionColor={Colors['activeTab']}
+                contentStyle={styles.inputContent}
+                style={styles.input}
+                // editable={false}
+                multiline={true}
+                theme={{
+                  colors: {
+                    primary: Colors['black'],
+                    text: Colors['black'],
+                    placeholder: Colors['white'],
+                    background: Colors['white'],
+                    surfaceVariant: Colors['white'],
+                  },
+                }}
+                value={addressValue}
+                onChangeText={(text) => handleAddressChange(text)}
+              />
+              <View style={styles.hideUnderline}></View>
+            </View>
+          </View>
+          <View style={styles.buttonWrapper}>
+            <Button
+              mode='contained'
+              style={styles.button}
+              buttonColor={Colors['black']}
+              textColor={Colors['white']}
+              accessibilityLabel='Sign Up'
+              labelStyle={styles.buttonLabel}
+              contentStyle={styles.buttonContent}
+              loading={loadingBtn}
+              disabled={loadingBtn || !selectedCountry || !selectedCurrency}
+              // onPress={() => handleIndustryRedirect()}
+              onPress={() => handleCreateStore()}
             >
-              <TextInput
-                label='Country'
-                underlineColor='transparent'
-                activeOutlineColor='transparent'
-                selectionColor={Colors['activeTab']}
-                contentStyle={styles.inputContent}
-                style={styles.input}
-                editable={false}
-                theme={{
-                  colors: {
-                    primary: Colors['black'],
-                    text: Colors['black'],
-                    placeholder: Colors['white'],
-                    background: Colors['white'],
-                    surfaceVariant: Colors['white'],
-                  },
-                }}
-                // multiline={true}
-                value={selectedCountry}
-                right={
-                  <TextInput.Icon
-                    icon={'chevron-down'}
-                    // onPress={() => console.log('pressed')}
-                    onPress={() => handleShowCountryList()}
-                    style={styles.inputIcon}
-                    theme={{
-                      colors: {
-                        primary: Colors['black'],
-                        text: Colors['black'],
-                        // placeholder: Colors['white'],
-                        background: Colors['white'],
-                      },
-                    }}
-                  />
-                }
-              />
-            </TouchableRipple>
-            <View style={styles.hideUnderline}></View>
+              Submit
+            </Button>
           </View>
-
-          <View style={styles.inputWrapper}>
-            <Pressable onPress={() => handleShowCurrencyList()}>
-              <TextInput
-                label='Currency'
-                underlineColor='transparent'
-                activeOutlineColor='transparent'
-                selectionColor={Colors['activeTab']}
-                contentStyle={styles.inputContent}
-                style={styles.input}
-                editable={false}
-                theme={{
-                  colors: {
-                    primary: Colors['black'],
-                    text: Colors['black'],
-                    placeholder: Colors['white'],
-                    background: Colors['white'],
-                    surfaceVariant: Colors['white'],
-                  },
-                }}
-                // multiline={true}
-                value={selectedCurrency}
-                right={
-                  <TextInput.Icon
-                    icon={'chevron-down'}
-                    // onPress={() => console.log('pressed')}
-                    onPress={() => handleShowCurrencyList()}
-                    style={styles.inputIcon}
-                    theme={{
-                      colors: {
-                        primary: Colors['black'],
-                        text: Colors['black'],
-                        // placeholder: Colors['white'],
-                        background: Colors['white'],
-                      },
-                    }}
-                  />
-                }
-              />
-            </Pressable>
-            <View style={styles.hideUnderline}></View>
-          </View>
-        </View>
-        <View style={styles.buttonWrapper}>
-          <Button
-            mode='contained'
-            style={styles.button}
-            buttonColor={Colors['black']}
-            textColor={Colors['white']}
-            accessibilityLabel='Sign Up'
-            labelStyle={styles.buttonLabel}
-            contentStyle={styles.buttonContent}
-            loading={loadingBtn || isLoading}
-            disabled={
-              loadingBtn || isLoading || !selectedCountry || !selectedCurrency
+          <ActionSheet
+            ref={actionSheetRef}
+            // snapPoints={[90]}
+            // containerStyle={{
+            //   // borderWidth: 3,
+            //   // borderColor: 'green',
+            //   paddingBottom: 130,
+            //   borderTopLeftRadius: 20,
+            //   borderTopRightRadius: 20,
+            // }}
+            snapPoints={[70]}
+            containerStyle={styles.actionSheetContainer}
+            useBottomSafeAreaPadding={true}
+            gestureEnabled={true}
+            CustomHeaderComponent={
+              <View style={styles.searchBar}>
+                <TextInput
+                  placeholder='Search country'
+                  mode='outlined'
+                  style={styles.searchInput}
+                  contentStyle={styles.searchInputContent}
+                  outlineStyle={styles.searchInputOutline}
+                  onChangeText={(text) => {
+                    setSearch(text);
+                    handleSearch(text);
+                  }}
+                  value={search}
+                  left={
+                    <TextInput.Icon
+                      icon={'magnify'}
+                      style={styles.inputIcon}
+                      // onPress={() => console.log('search')}
+                    />
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon={'close'}
+                      onPress={() => {
+                        setSearch('');
+                        setCountries(searchCountries);
+                      }}
+                      style={styles.inputIcon}
+                    />
+                  }
+                />
+              </View>
             }
-            // onPress={() => handleIndustryRedirect()}
-            onPress={() => handleUpdateStore()}
           >
-            Next
-          </Button>
-        </View>
-        <ActionSheet
-          ref={actionSheetRef}
-          // snapPoints={[90]}
-          // containerStyle={{
-          //   // borderWidth: 3,
-          //   // borderColor: 'green',
-          //   paddingBottom: 130,
-          //   borderTopLeftRadius: 20,
-          //   borderTopRightRadius: 20,
-          // }}
-          snapPoints={[70]}
-          containerStyle={styles.actionSheetContainer}
-          useBottomSafeAreaPadding={true}
-          gestureEnabled={true}
-          CustomHeaderComponent={
-            <View style={styles.searchBar}>
-              <TextInput
-                placeholder='Search country'
-                mode='outlined'
-                style={styles.searchInput}
-                contentStyle={styles.searchInputContent}
-                outlineStyle={styles.searchInputOutline}
-                onChangeText={(text) => {
-                  setSearch(text);
-                  handleSearch(text);
-                }}
-                value={search}
-                left={
-                  <TextInput.Icon
-                    icon={'magnify'}
-                    style={styles.inputIcon}
-                    // onPress={() => console.log('search')}
-                  />
-                }
-                right={
-                  <TextInput.Icon
-                    icon={'close'}
-                    onPress={() => {
-                      setSearch('');
-                      setCountries(searchCountries);
-                    }}
-                    style={styles.inputIcon}
-                  />
-                }
-              />
+            <View>
+              <View style={styles.listContainer}>
+                <FlatList
+                  data={countries}
+                  renderItem={renderCountryItem}
+                  keyExtractor={(item) => item.id.toString()}
+                  // initialNumToRender={10}
+                />
+              </View>
             </View>
-          }
-        >
-          <View>
-            <View style={styles.listContainer}>
-              <FlatList
-                data={countries}
-                renderItem={renderCountryItem}
-                keyExtractor={(item) => item.value}
-                // initialNumToRender={10}
-              />
+          </ActionSheet>
+          <ActionSheet
+            ref={currencyActionSheetRef}
+            snapPoints={[70]}
+            containerStyle={styles.actionSheetContainer}
+            useBottomSafeAreaPadding={true}
+            gestureEnabled={true}
+            CustomHeaderComponent={
+              <View style={styles.searchBar}>
+                <TextInput
+                  placeholder='Search currency'
+                  mode='outlined'
+                  style={styles.searchInput}
+                  contentStyle={styles.searchInputContent}
+                  outlineStyle={styles.searchInputOutline}
+                  onChangeText={(text) => {
+                    setCurrencySearch(text);
+                    handleCurrencySearch(text);
+                  }}
+                  value={currencySearch}
+                  left={
+                    <TextInput.Icon
+                      icon={'magnify'}
+                      style={styles.inputIcon}
+                      // onPress={() => console.log('search')}
+                    />
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon={'close'}
+                      onPress={() => {
+                        setCurrencySearch('');
+                        setCurrencies(searchCurrency);
+                      }}
+                      style={styles.inputIcon}
+                    />
+                  }
+                />
+              </View>
+            }
+          >
+            <View>
+              <View style={styles.listContainer}>
+                <FlatList
+                  data={currencies}
+                  renderItem={renderCurrencyItem}
+                  keyExtractor={(item) => item.id.toString()}
+                />
+              </View>
             </View>
-          </View>
-        </ActionSheet>
-        <ActionSheet
-          ref={currencyActionSheetRef}
-          snapPoints={[70]}
-          containerStyle={styles.actionSheetContainer}
-          useBottomSafeAreaPadding={true}
-          gestureEnabled={true}
-        >
-          <View>
-            <View style={styles.listContainer}>
-              <FlatList
-                data={currencies}
-                renderItem={renderCurrencyItem}
-                keyExtractor={(item) => item.value}
-              />
+          </ActionSheet>
+          <ActionSheet
+            ref={industryActionSheetRef}
+            snapPoints={[70]}
+            containerStyle={styles.actionSheetContainer}
+            useBottomSafeAreaPadding={true}
+            gestureEnabled={true}
+            CustomHeaderComponent={
+              <View style={styles.searchBar}>
+                <TextInput
+                  placeholder='Search industry'
+                  mode='outlined'
+                  style={styles.searchInput}
+                  contentStyle={styles.searchInputContent}
+                  outlineStyle={styles.searchInputOutline}
+                  onChangeText={(text) => {
+                    setIndustrySearch(text);
+                    handleIndustrySearch(text);
+                  }}
+                  value={industrySearch}
+                  left={
+                    <TextInput.Icon icon={'magnify'} style={styles.inputIcon} />
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon={'close'}
+                      onPress={() => {
+                        setIndustrySearch('');
+                        setIndustries(searchIndustry);
+                      }}
+                      style={styles.inputIcon}
+                    />
+                  }
+                />
+              </View>
+            }
+          >
+            <View>
+              <View style={styles.listContainer}>
+                <FlatList
+                  data={industries}
+                  renderItem={renderIndustryItem}
+                  keyExtractor={(item) => item.id.toString()}
+                />
+              </View>
             </View>
-          </View>
-        </ActionSheet>
-      </ScrollView>
+          </ActionSheet>
+          <ActionSheet
+            ref={timezoneActionSheetRef}
+            snapPoints={[70]}
+            containerStyle={styles.actionSheetContainer}
+            useBottomSafeAreaPadding={true}
+            gestureEnabled={true}
+            CustomHeaderComponent={
+              <View style={styles.searchBar}>
+                <TextInput
+                  placeholder='Search timezone'
+                  mode='outlined'
+                  style={styles.searchInput}
+                  contentStyle={styles.searchInputContent}
+                  outlineStyle={styles.searchInputOutline}
+                  onChangeText={(text) => {
+                    setTimezoneSearch(text);
+                    handleTimezoneSearch(text);
+                  }}
+                  value={timezoneSearch}
+                  left={
+                    <TextInput.Icon icon={'magnify'} style={styles.inputIcon} />
+                  }
+                  right={
+                    <TextInput.Icon
+                      icon={'close'}
+                      onPress={() => {
+                        setTimezoneSearch('');
+                        setTimezones(searchTimezone);
+                      }}
+                      style={styles.inputIcon}
+                    />
+                  }
+                />
+              </View>
+            }
+          >
+            <View>
+              <View style={styles.listContainer}>
+                <FlatList
+                  data={timezones}
+                  renderItem={renderTimezoneItem}
+                  keyExtractor={(item) => item.id.toString()}
+                />
+              </View>
+            </View>
+          </ActionSheet>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

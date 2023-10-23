@@ -32,7 +32,7 @@ const AllProductListScreen = ({
     allProductsList.forEach((product) => {
       newData.push(product);
     });
-    setProductsCheck(newData);
+    setProductsCheck([]);
     return () => {
       setProductsCheck([]);
     };

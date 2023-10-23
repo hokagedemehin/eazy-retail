@@ -4,11 +4,8 @@ import { BusinessNameProps } from '../../interfaces/navigation/navigation';
 import Colors from '../../constants/Colors';
 import { Button, IconButton, TextInput } from 'react-native-paper';
 import { BackSvgComponent } from '@/assets/icons';
-import { useCreateStore } from '@/hooks/storeHook';
-// import { useAppSelector } from '@/hooks/redux';
-import { useGetUser } from '@/hooks/auth';
 import { useAppDispatch } from '@/hooks/redux';
-import { setStoreUser } from '@/store/slice/storeSlice';
+import { setStoreName } from '@/store/slice/storeSlice';
 
 const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
   // ************* HEADER *************
@@ -48,37 +45,26 @@ const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
   //   navigation.navigate('BusinessLocation');
   // };
 
-  const [loadingBtn, setLoadingBtn] = useState(false);
+  // const { countryData } = useCountry();
+  // console.log('countryData :>> ', countryData);
+
+  // const { currencyData } = useCurrency();
+  // console.log('currencyData :>> ', currencyData);
+
+  // const { industryData } = useIndustry();
+  // console.log('industryData :>> ', industryData);
+
+  // const [loadingBtn, setLoadingBtn] = useState(false);
   const [formValue, setFormValue] = useState('');
   const dispatch = useAppDispatch();
+  // const { name } = useAppSelector((state) => state.storeUser);
+  // console.log('name', name);
 
-  // const { user } = useAppSelector((state) => state.user);
-
-  // console.log(user);
-
-  const { createStoreMutate, isLoading } = useCreateStore();
-  const { userData } = useGetUser();
-
-  const handleCreateStore = async () => {
-    setLoadingBtn(true);
-    const form = {
-      business_name: formValue,
-      country: '',
-      currency: '',
-      industry: '',
-      user: userData.pk,
-    };
-    createStoreMutate(form, {
-      onSuccess: async (data) => {
-        dispatch(setStoreUser(data));
-        navigation.navigate('BusinessLocation');
-        setLoadingBtn(false);
-      },
-      onError: (error) => {
-        console.log(error);
-        setLoadingBtn(false);
-      },
-    });
+  const handleStoreName = async () => {
+    // setLoadingBtn(true);
+    dispatch(setStoreName(formValue));
+    setFormValue('');
+    navigation.navigate('BusinessLocation');
   };
 
   return (
@@ -110,10 +96,10 @@ const BusinessNameScreen = ({ navigation }: BusinessNameProps) => {
           accessibilityLabel='Sign Up'
           labelStyle={styles.buttonLabel}
           contentStyle={styles.buttonContent}
-          loading={loadingBtn || isLoading}
-          disabled={loadingBtn || isLoading || !formValue}
+          // loading={loadingBtn || isLoading}
+          // disabled={loadingBtn || isLoading || !formValue}
           // onPress={() => handleIndustryRedirect()}
-          onPress={() => handleCreateStore()}
+          onPress={() => handleStoreName()}
         >
           Next
         </Button>

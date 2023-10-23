@@ -99,8 +99,8 @@ const NewSale = ({ navigation }: CounterNewSaleNavigation) => {
         };
         tempArr.push(obj);
       });
-      setProductData(tempArr);
-      setSearchData(tempArr);
+      setProductData([]);
+      setSearchData([]);
       setSelectedIds(new Set());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -4,23 +4,21 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import BaseUrl from '@/utils/BaseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const BACKEND_URL = BaseUrl()
-
+const BACKEND_URL = BaseUrl();
 
 type postSignInData = {
   email: string;
   password: string;
-}
+};
 
 type postSignUpData = {
   email: string;
   phone: string;
-  first_name: string;
-  last_name: string;
-  password1: string;
-  password2: string;
-}
+  firstname: string;
+  lastname: string;
+  password: string;
+  password_confirmation: string;
+};
 
 // type getUserData = {
 //   pk: number;
@@ -34,24 +32,17 @@ type postSignUpData = {
 const postSignInFetcher = async (url: string, data: postSignInData) => {
   const response = await axios.post(url, data);
   return response.data;
-}
+};
 
 const postSignUpFetcher = async (url: string, data: postSignUpData) => {
   const response = await axios.post(url, data);
   return response.data;
-}
+};
 
-const getUserFetcher = async (url: string) => {
-  const token = await AsyncStorage.getItem('token');
-  // console.log(token)
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+const postVerifyEmailFetcher = async (url: string, data: { token: string }) => {
+  const response = await axios.post(url, data);
   return response.data;
-}
-
+};
 
 export const useSignIn = () => {
   // const queryClient = useQueryClient();
@@ -64,35 +55,63 @@ export const useSignIn = () => {
   // });
   // return { mutate, isLoading };
 
-  const {mutate, isLoading} = useMutation({
-    mutationFn: (data: postSignInData) => postSignInFetcher(`${BACKEND_URL}/login`, data),
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (data: postSignInData) =>
+      postSignInFetcher(`${BACKEND_URL}/login`, data),
     // onSuccess: async(data) => {
-    //   console.log(data)
     //   // await AsyncStorage.setItem('easy-token', data.key);
     // },
-  })
-  return  {
+  });
+  return {
     mutate,
     isLoading,
-  }
-}
+  };
+};
 
 export const useSignUp = () => {
-
-  const {mutate, isLoading} = useMutation({
-    mutationFn: (data: postSignUpData) => postSignUpFetcher(`${BACKEND_URL}/signup`, data),
-  })
-  return  {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (data: postSignUpData) =>
+      postSignUpFetcher(`${BACKEND_URL}/signup`, data),
+  });
+  return {
     mutate,
     isLoading,
-  }
-}
+  };
+};
 
 export const useGetUser = () => {
-  // const { data, isLoading } = useQuery<getUserData, Error>({
+  // const getToken = async () => {
+  //   const token = await AsyncStorage.getItem('token');
+  //   return token;
+  // };
+  // const token = getToken()
   const { data, isLoading } = useQuery({
     queryKey: ['user'],
-    queryFn: () => getUserFetcher(`${BACKEND_URL}/dj-rest-auth/user/`),
+    queryFn: async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        return null;
+      }
+
+      const response = await axios.get(`${BACKEND_URL}/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response?.data?.data;
+    },
+    enabled: !!AsyncStorage.getItem('token'),
   });
   return { userData: data, isLoading };
-}
+};
+
+export const useVerifyEmail = () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (data: { token: string }) =>
+      postVerifyEmailFetcher(`${BACKEND_URL}/verify/email`, data),
+  });
+  return {
+    mutate,
+    isLoading,
+  };
+};

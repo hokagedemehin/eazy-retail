@@ -22,7 +22,7 @@ const RegistrationSuccessfullScreen = ({
 
           <Text style={styles.successText}>Successful</Text>
           <Text style={styles.successSubText}>
-            You have successfully logged created your account
+            You have successfully created your account
           </Text>
         </View>
       </View>
@@ -39,7 +39,7 @@ const RegistrationSuccessfullScreen = ({
           // disabled={loadingBtn}
           onPress={() => handleHomePageRedirect()}
         >
-          Great
+          Go to Home
         </Button>
       </View>
     </SafeAreaView>

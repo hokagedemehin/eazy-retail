@@ -28,7 +28,13 @@ const AllCategoryListScreen = ({
     allCategory.forEach((category) => {
       newData.push(category);
     });
-    setCategoryList(newData);
+    setCategoryList([
+      {
+        id: '0',
+        name: 'add new category',
+        image: '',
+      },
+    ]);
     return () => {
       setCategoryList([]);
     };

@@ -19,6 +19,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ProductScreen from './ProductScreen';
 import CustomersScreen from './CustomersScreen';
 import { CounterScreenNavigation } from '@/interfaces/navigation/counter';
+// import { useAppSelector } from '@/hooks/redux';
+import { useGetUser } from '@/hooks/auth';
 // import Constants from 'expo-constants';
 // import * as Linking from 'expo-linking';
 
@@ -36,10 +38,8 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
       return 'Good Evening';
     }
   };
-
-  // console.log(Constants?.expoConfig?.extra);
-  // console.log(process.env);
-  // console.log(Linking.createURL('Counter'));
+  const { userData } = useGetUser();
+  // const { user } = useAppSelector((state) => state.user);
 
   return (
     <SafeAreaView style={styles.safeAreaStyle}>
@@ -59,7 +59,7 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
                   {checkGreetings()}, {''}
                 </Text>
                 <Text numberOfLines={1} style={styles.name}>
-                  Jane Smith
+                  {userData?.firstname}
                 </Text>
               </View>
             </View>
@@ -82,7 +82,7 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
               </View>
             </View>
           </View>
-          <View style={styles.verificationContainer}>
+          {/* <View style={styles.verificationContainer}>
             <View style={styles.verificationBtns}>
               <TouchableRipple
                 onPress={() => console.log('Pressed')}
@@ -101,7 +101,7 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
                 <Text style={styles.verificationText}>Verify phone number</Text>
               </TouchableRipple>
             </View>
-          </View>
+          </View> */}
         </View>
         <View style={styles.cardContainer}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -128,9 +128,7 @@ const Counter = ({ navigation }: CounterScreenNavigation) => {
                 <Text style={styles.totalSaleCardHeaderText}>
                   Today&apos;s Total Sales
                 </Text>
-                <Text style={styles.totalSaleCardContentText}>
-                  &#8358;60,000,000
-                </Text>
+                <Text style={styles.totalSaleCardContentText}>&#8358;0</Text>
                 <TouchableRipple
                   onPress={() => console.log('Pressed')}
                   rippleColor={Colors['white']}

@@ -16,7 +16,7 @@ import {
   SalesUpSvgComponent,
 } from '@/assets/icons';
 // import { IconButton } from 'react-native-paper';
-import { Button, Chip, Image } from '@rneui/themed';
+import { Button, Chip } from '@rneui/themed';
 import Colors from '@/constants/Colors';
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -28,8 +28,9 @@ import // LineChart,
 // ContributionGraph,
 // StackedBarChart
 'react-native-chart-kit';
-import { salesCards, salesTopProducts } from '@/data/dummy_data';
+import { salesCards } from '@/data/dummy_data';
 import { ScrollView } from 'react-native-gesture-handler';
+import EmptyListComponent from '@/components/EmptyList/EmptyList';
 
 const SalesScreen = () => {
   const handleShareLink = async () => {
@@ -98,7 +99,7 @@ const SalesScreen = () => {
   // salesCards
 
   interface SalesCard {
-    id: string;
+    id: number;
     name: string;
     amount: string;
     type: string;
@@ -275,7 +276,7 @@ const SalesScreen = () => {
             {/* sales summary */}
             <View style={styles.salesSummaryWrapper}>
               <Text style={styles.salesSummaryText}>Total Sales</Text>
-              <Text style={styles.salesValueText}>&#8358;1000</Text>
+              <Text style={styles.salesValueText}>&#8358;0.00</Text>
             </View>
 
             {/* chart */}
@@ -315,7 +316,7 @@ const SalesScreen = () => {
             <FlatList
               data={salesCards}
               renderItem={renderSales}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               numColumns={2}
               showsHorizontalScrollIndicator={false}
               scrollEnabled={false}
@@ -328,7 +329,7 @@ const SalesScreen = () => {
           {/* top products */}
           <View style={styles.topProductsWrapper}>
             <Text style={styles.topProductsText}>Top Products</Text>
-            {salesTopProducts.map((item) => (
+            {/* {salesTopProducts.map((item) => (
               <View key={item.id} style={styles.topProductCardWrapper}>
                 <View style={styles.imageDescription}>
                   <Image
@@ -352,7 +353,8 @@ const SalesScreen = () => {
                   </Text>
                 </View>
               </View>
-            ))}
+            ))} */}
+            <EmptyListComponent message='No top products yet' />
           </View>
           {/* calender */}
           <View>

@@ -12,12 +12,15 @@ import { RootStackScreenProps } from '@/interfaces/navigation/navigation';
 import { useToast } from 'react-native-toast-notifications';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import { TextInput } from 'react-native-paper';
+import { useVerifyEmail } from '@/hooks/auth';
+import { AxiosError } from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PhoneVerificationScreen = ({
   navigation,
 }: Omit<RootStackScreenProps<'PhoneVerification'>, 'route'>) => {
   const toast = useToast();
-  const CELL_COUNT = 4;
+  const CELL_COUNT = 6;
 
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
@@ -26,9 +29,44 @@ const PhoneVerificationScreen = ({
     setValue,
   });
 
+  const { mutate } = useVerifyEmail();
   const handleSubmit = () => {
-    console.log('verify number');
-    navigation.navigate('BusinessName');
+    // console.log('verify number');
+    // console.log('otp value', value);
+    // navigation.navigate('BusinessName');
+    const form = {
+      token: value,
+    };
+    try {
+      mutate(form, {
+        onSuccess: async (data) => {
+          // console.log(data);
+          toast.show(data?.message, {
+            type: 'success',
+          });
+          await AsyncStorage.setItem('easyretail_onboarding', 'store_creation');
+          navigation.replace('BusinessName');
+        },
+        onError: (error) => {
+          // console.log(error);
+          if (error instanceof AxiosError) {
+            if (error?.response?.data?.errors?.token) {
+              toast.show(error?.response?.data?.errors?.token[0], {
+                type: 'danger',
+              });
+            }
+            console.error(error?.response?.data);
+            // toast.show(error?.response?.data?.message, {
+            //   type: 'danger'})
+          }
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      toast.show('Something went wrong, please try again later.', {
+        type: 'danger',
+      });
+    }
   };
 
   // *************** BOTTOM SHEET ***************
@@ -53,12 +91,12 @@ const PhoneVerificationScreen = ({
       <View style={styles.container}>
         <View>
           <View style={styles.headerWrapper}>
-            <Text style={styles.headerText}>Phone Number Verification</Text>
+            <Text style={styles.headerText}>Email Verification</Text>
           </View>
           <View style={styles.messageWrapper}>
             <Text style={styles.messageText}>
-              An OTP has been sent to +1 (555) 555-1234. Type the OTP below to
-              verify your phone number
+              An OTP has been sent to mail. Type the OTP below to verify your
+              email address
             </Text>
           </View>
           <View style={styles.codeFieldRoot}>
@@ -87,7 +125,7 @@ const PhoneVerificationScreen = ({
         <View style={styles.footerWrapper}>
           <View style={styles.buttonWrapper}>
             <Button
-              title='Verify phone number'
+              title='Verify email'
               // onPress={pickImage}
               onPress={() => handleSubmit()}
               buttonStyle={styles.VerifyBtnStyle}
@@ -97,10 +135,10 @@ const PhoneVerificationScreen = ({
             />
           </View>
           <View style={styles.editNumberWrapper}>
-            <Text style={styles.editNumberText}>Wrong phone number?</Text>
+            <Text style={styles.editNumberText}>Wrong email?</Text>
             <Button
               type='clear'
-              title='Edit phone number'
+              title='Edit email'
               titleStyle={styles.editNumberButtonText}
               onPress={() => handleOpenBottomSheet()}
               // size='sm'
@@ -186,15 +224,15 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   codeFieldRoot: {
-    paddingHorizontal: 25,
+    paddingHorizontal: 10,
     paddingVertical: 20,
     // borderWidth: 1,
   },
   cell: {
-    width: 60,
-    height: 60,
-    lineHeight: 58,
-    fontSize: 26,
+    width: 55,
+    height: 55,
+    lineHeight: 50,
+    fontSize: 24,
     borderWidth: 1,
     // borderColor: '#00000030',
     borderColor: Colors['border'],
