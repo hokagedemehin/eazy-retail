@@ -7,6 +7,7 @@ import {
   Text,
   View,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import React, {
   // useEffect,
@@ -48,7 +49,6 @@ import {
 import { AxiosError } from 'axios';
 import { useToast } from 'react-native-toast-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 
 const BusinessLocationScreen = ({ navigation }: BusinessLocationProps) => {
   const dispatch = useAppDispatch();

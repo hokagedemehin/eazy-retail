@@ -66,6 +66,8 @@ const SignInScreen = ({ navigation }: SignInProps) => {
       setLoadingPage(false);
     }
     checkUser();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, navigation, userData]);
 
   const [showPassword, setShowPassword] = useState(false);
